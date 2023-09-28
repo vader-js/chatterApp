@@ -1,0 +1,82 @@
+.sidebarContainer{
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+}
+.sidebarHead{
+    width: 100%;
+    height: 4rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+.sidebarHead h1{
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #543EE0;
+    /* margin: 1rem 0; */
+}
+.sidebarHead sup{
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: black;
+}
+.sidebarPar{
+    font-size: 16px;
+    line-height: 27px;
+    margin-bottom: 1rem;
+    align-self: flex-start;
+    margin-left: 1.7rem;
+    /* justify-content: center; */
+}
+.sidebarBody{
+    list-style: none;
+    margin-bottom: 2rem;
+}
+.sidebarText{
+    margin-bottom: 1rem;
+}
+.sideLink{
+    text-decoration: none ;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-weight: 300;
+    font-size: 14px;
+}
+.sideLink span{
+    margin-right: 1rem;
+}
+.trend{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+.trendIcon{
+    margin-left: 1rem;
+    display: inline-flex;
+}
+.trending{
+    list-style: none;
+    margin-bottom: 2rem;
+}
+.trendText{
+    margin-bottom: 1rem;
+    font-size: 14px;
+    font-weight: 300;
+}
+.all{
+    color: #543EE0;
+}
+.log{
+    color: red;
+     cursor: pointer;
+}
