@@ -1,5 +1,7 @@
 .feedContainer{
-    height: 2000px;
+    height: auto;
+    padding-bottom: 20px;
+    /* background-color: black; */
 }
 .feedHead{
     display: flex;
@@ -29,6 +31,7 @@
 }
 .feeds_display{
     width: 90%;
+    height: auto;
     margin: 2rem auto;
 }
 .head_desc{
@@ -92,7 +95,23 @@
     height: 60%;
 }
 .profile_desc{
+    /* opacity: 0.5; */
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+.profile_desc p{
     opacity: 0.5;
+}
+.profile_time{
+    display: inline-flex;
+    font-size: 12px;
+    margin-left: 1rem;
+    opacity: 1 !important;
+}
+.timestamp{
+    opacity: 1 !important;
 }
 .feed_title h2{
     font-weight: 500;
@@ -145,7 +164,6 @@
     border: 0.5px solid #ccc;
     background-color: #f6f4f4;
     padding: 2%;
-    overflow-y: scroll ;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 .comment_lists{
@@ -154,6 +172,9 @@
     flex-direction: column;
     gap: 0.5rem;
     width: 100%;
+    padding-bottom: 45px;
+    height: 200px;
+    overflow-y: scroll ;
 }
 .com_list{
     width: 100%;
@@ -189,21 +210,31 @@
 }
 .comment{
     position: absolute;
-    bottom: 2px;
-    left: 10%;
+    bottom: 5px;
+    left: 5%;
     width: 100%;
     display: flex;
     align-items: center;
 }
 .send{
     display: inline-flex;
+    justify-content: center;
     align-items: center;
     margin-left: 10px;
+    width: 60px;
+    background-color: #543EE0;
+    border-radius: 5px;
+    border: none;
+    padding: 5px ;
 }
 .com_input{
     width: 80%;
     padding: 7px 5px;
     border-radius: 10px;
     border: none;
+}
+.see_more{
+    color: #543EE0;
+    text-decoration: none;
 }
 
