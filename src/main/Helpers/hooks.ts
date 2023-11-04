@@ -1,5 +1,8 @@
 import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import { ref, uploadString, getDownloadURL, uploadBytes } from "firebase/storage";
+import { storage } from "../firebase/firebaseConfig";
+
 
 export function useGetDoc(){
     const getDocument = async (post) => {
@@ -46,3 +49,31 @@ export function useGetUserDoc(){
     }
    return {getUserDoc}
 }
+
+// Upload a single image to Firebase Storage and return its URL
+export function useUploadImage() {
+  const uploadImageToStorage = async ({image, UniqueId})=>{
+    if (image === '') return;
+    const imageRef = ref(storage , `postImage/${UniqueId}`)
+    const upload = await uploadBytes(imageRef, image)
+    return {upload}
+  }
+
+  return { uploadImageToStorage };
+}
+
+export function useDownloadimage(){
+  const downloadImage = async (item) => {
+    const imageRef = ref(storage, `postImage/${item}`);
+    const downloadUrl = await getDownloadURL(imageRef)
+      return downloadUrl;
+  }
+  return {downloadImage}
+}
+
+
+
+
+
+
+

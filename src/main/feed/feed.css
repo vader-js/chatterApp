@@ -237,4 +237,10 @@
     color: #543EE0;
     text-decoration: none;
 }
+.post_image{
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    
+}
 

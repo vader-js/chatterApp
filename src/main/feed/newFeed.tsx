@@ -17,6 +17,7 @@ import {
 import { db } from "../firebase/firebaseConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserRef } from "../../app/authSlice";
+import { useUploadImage } from "../Helpers/hooks";
 
 export default function NewFeed({ setNewPost }: any) {
   type User = {
@@ -39,30 +40,35 @@ export default function NewFeed({ setNewPost }: any) {
   const [title, setTitle] = useState("");
   const [docId, setDocId] = useState("")
   const [isEditorLoaded, setIsEditorLoaded] = useState(false)
+  const [image, setimage] = useState("")
   const { user } = useSelector((state: userState) => state.user);
+  const {uploadImageToStorage} = useUploadImage()
+
+  function generateUniqueId() {
+    // Generate a timestamp
+    const timestamp = new Date().getTime();
+  
+    // Generate a random number (between 0 and 1, inclusive)
+    const random = Math.random();
+  
+    // Convert the random number to a string and remove the decimal point
+    const randomString = random.toString().slice(2);
+  
+    // Combine the timestamp and random number to create a unique ID
+    const uniqueId = `${timestamp}${randomString}`;
+  
+    return uniqueId;
+  };
  
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent().replace(/<\/?[^>]+(>|$)/g, ""));
-      console.log(editorRef.current.dom.select('img'))
-      function generateUniqueId() {
-        // Generate a timestamp
-        const timestamp = new Date().getTime();
-      
-        // Generate a random number (between 0 and 1, inclusive)
-        const random = Math.random();
-      
-        // Convert the random number to a string and remove the decimal point
-        const randomString = random.toString().slice(2);
-      
-        // Combine the timestamp and random number to create a unique ID
-        const uniqueId = `${timestamp}${randomString}`;
-      
-        return uniqueId;
-      };
+      let Img = editorRef.current.dom.select('img')
       const UniqueId = generateUniqueId();
+
       const createPost = async () => {
           try {
+           
             await updateDoc(doc(db, 'users', user.userRef), {
               post: arrayUnion({
                 title: title,
@@ -83,6 +89,9 @@ export default function NewFeed({ setNewPost }: any) {
             console.error('Error adding post:', error);
           }
           try {
+            if(image){
+              const {upload} = await uploadImageToStorage({image, UniqueId})
+            }
             await addDoc(collection(db, 'posts'),{
               title,
               body: editorRef.current.getContent().replace(/<\/?[^>]+(>|$)/g, ""),
@@ -95,8 +104,9 @@ export default function NewFeed({ setNewPost }: any) {
               likes: 0,
               comment:[],
               views: 0,
+              image: Img.length > 0 ? true: false ,
               name: user.fullName,
-              userId: user.userRef
+              userId: user.userRef,
             })
           }catch (error) {
             console.log("error creating post db")
@@ -104,7 +114,7 @@ export default function NewFeed({ setNewPost }: any) {
         }
       createPost();
       setTitle('');
-      
+      editorRef.current.setContent('');
     }
   };
   const editorInit = (ext, editor) => {
@@ -204,28 +214,22 @@ export default function NewFeed({ setNewPost }: any) {
               */
           
               input.onchange = function () {
-                var file = this.files[0];
-          
+                var file = input.files[0];
+                setimage(file);
                 var reader = new FileReader();
                 reader.onload = function () {
-                  /*
-                    Note: Now we need to register the blob in TinyMCEs image blob
-                    registry. In the next release this part hopefully won't be
-                    necessary, as we are looking to handle it internally.
-                  */
-                  var id = 'blobid' + (new Date()).getTime();
-                  var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
-                  var base64 = reader.result.split(',')[1];
-                  var blobInfo = blobCache.create(id, file, base64);
-                  blobCache.add(blobInfo);
-          
-                  /* call the callback and populate the Title field with the file name */
-                  cb(blobInfo.blobUri(), { title: file.name });
-                };
-                reader.readAsDataURL(file);
+                 var dataURL = reader.result;
+      
+                // Pass the Data URL to TinyMCE
+                cb(dataURL);
+
+      // Optionally, you can save the file data for later use
+    };
+    reader.readAsDataURL(file);
               };
           
               input.click();
+              setimage('')
             },
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",

@@ -17,6 +17,7 @@ import Feed from './main/feed/feed.tsx'
 import {auth} from './main/firebase/firebaseConfig.ts'
 import Animate from './assets/component/animate.tsx'
 import FullFeed from './main/feed/fullFeed.tsx'
+import Bookmarks from './main/bookmarks/bookmarks.tsx'
 
 const router = createBrowserRouter(
   [
@@ -73,7 +74,7 @@ const router = createBrowserRouter(
     },
     {
       path: "/home/bookmarks",
-      element: <div>Bookmarks</div>
+      element: <Bookmarks />
     },
     {
       path: "/home/teamblogs",
