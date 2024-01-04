@@ -9,8 +9,11 @@ import "./layout.css"
 import { useSelector } from "react-redux/es/hooks/useSelector"
 import { db } from "../firebase/firebaseConfig"
 import { collection, getDocs, query, where} from "firebase/firestore"
-import { setUser, setUserRef } from "../../app/authSlice"
+import { setUser, setUserProfileImage, setUserRef } from "../../app/authSlice"
 import { useDispatch } from "react-redux"
+import { onAuthStateChanged } from "firebase/auth"
+import {  useDownloadProfileImage } from "../Helpers/hooks"
+import Socials from "./socials"
 
 
 export default function Layout() {
@@ -26,24 +29,30 @@ export default function Layout() {
       displayPicture?: string,
       token?: string,
       uid: string,
+      profileImage?: string
+      headerImage?: string
+      userRef?: string,
+      page_no?: number,
     }
   }
   type userState = {
-    user: User
+    reducer: {
+      user: User
+    }  
   }
 
   
-  const {user} = useSelector((state: userState) => state.user )
+  const {user} = useSelector((state: userState) => state.reducer.user )
+  
 
   //if Login was used, get full user details from firestore
   const getUserCollectionRef = collection(db, 'users')
-  
-  useEffect(() => {
-    if (!auth.currentUser && !sessionStorage.getItem("user")) {
-      navigate("/auth")
-    }
-  },[auth])
 
+        // download profile image
+const {downloadProfileImage} = useDownloadProfileImage();
+
+
+  
   useEffect(() => {
     if (!user.fullName){
       const findUserInDatabase = async ()=>{
@@ -57,7 +66,9 @@ export default function Layout() {
 
   useEffect(() => {
     if (currentUser.length === 1){
-      dispatch(setUser(...currentUser))}
+      console.log(currentUser)
+      const {fullName, email, uid, title, bio, profession} = currentUser[0]
+      dispatch(setUser({fullName, email, uid, title, bio, profession}))}
   },[currentUser]);
 
   useEffect(()=>{
@@ -80,6 +91,20 @@ export default function Layout() {
       setDisplayName(user?.fullName?.split(' ')[0])
     }
   },[user])
+
+  useEffect(() =>{
+    const fetchData = async () => {
+      if(user.userRef){
+        const profile_image = await downloadProfileImage(user.userRef);
+        if (profile_image) {
+          dispatch(setUserProfileImage(profile_image))
+        }
+      }
+      }
+      fetchData();
+  },[ user.userRef])
+  
+
   return (
     <motion.main 
     initial={{opacity: 0}}
@@ -102,21 +127,32 @@ export default function Layout() {
              
               </div>
              
-            <div className="profile" >
+            <div className="layout_profile" >
               <span className="notification">
                 <Notification size="21"/>
               </span>
-                <ProfileCircle size="40"/>
+              <span className="layout_profile_desc">
+              <span onClick={()=> navigate('/home/account')}>
+
+              {user.profileImage ? <img src={user.profileImage} alt="" className="layout_profile_image" /> : <ProfileCircle size="40"/>}
+              </span>
+                
                 <span className="profileName">Hi, {displayName? displayName : null}</span>
+              </span>
             </div>
             
             </div>
+            <section className="layout_main">
             <article className="layoutContent">
                 <Outlet/>
             </article>
+              <section className="layoutRight">
+          <Socials/>
         </section>
-        <section className="layoutRight">
-          
+            </section>
+           
+      
+      
         </section>
     </motion.main>
   )

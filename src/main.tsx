@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import Auth from './auth/auth.tsx'
@@ -6,7 +6,8 @@ import Register from './auth/register.tsx'
 import Login from './auth/login.tsx'
 import Layout from './main/layout/layout.tsx'
 import { Provider } from 'react-redux'
-import store from './app/store.ts'
+import {store, persistor} from './app/store.ts'
+import { PersistGate } from 'redux-persist/integration/react';
 import './index.css'
 import {
   createBrowserRouter,
@@ -18,6 +19,9 @@ import {auth} from './main/firebase/firebaseConfig.ts'
 import Animate from './assets/component/animate.tsx'
 import FullFeed from './main/feed/fullFeed.tsx'
 import Bookmarks from './main/bookmarks/bookmarks.tsx'
+import { onAuthStateChanged } from 'firebase/auth'
+import Authentication from './auth/Authentication.tsx'
+import Account from './main/account/account.tsx'
 
 const router = createBrowserRouter(
   [
@@ -26,18 +30,18 @@ const router = createBrowserRouter(
   element: <Animate name="Animate">
     <App />
   </Animate>,
-  loader: () => {
-    if(auth.currentUser || sessionStorage.getItem('user')){
-      return redirect('/home')
-    }
-    return null
-  }
+  // loader: () => {
+  //   if(auth.currentUser){
+  //     return redirect('/home')
+  //   }
+  //   return null
+  // }
 },
 {
   path: "/auth",
   element: <Animate name='Animate'><Auth /></Animate>,
   loader: () => {
-    if(auth.currentUser && sessionStorage.getItem("user")){
+    if(auth.currentUser){
       return redirect("/home")
     }
     return null
@@ -56,20 +60,14 @@ const router = createBrowserRouter(
 },
 {
   path: "/home",
-  element: <Animate name='Animate'><Layout/></Animate>,
-  loader: ()=>{
-    if(!auth.currentUser && !sessionStorage.getItem("user")){
-      return redirect("/")
-    }
-    return null
-  },
+  element: <Authentication name='authenticate'><Animate name='Animate'><Layout/></Animate></Authentication>,
   children: [
     {
       index: true,
       element: <Animate name='Animate'><Feed /></Animate>,
     },
     {
-      path: "/home/feed",
+      path: "/home/feed/:id",
       element: <FullFeed/>
     },
     {
@@ -90,7 +88,7 @@ const router = createBrowserRouter(
     },
     {
       path: "/home/account",
-      element: <div>Account</div>
+      element: <Account/>
     },
     {
       path: "/home/notifications",
@@ -104,7 +102,9 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-    <RouterProvider router={router}/>
+      <PersistGate loading={null} persistor={persistor}>
+      <RouterProvider router={router}/>
+      </PersistGate>
     </Provider>
    
   </React.StrictMode>,

@@ -67,6 +67,7 @@
 .trending{
     list-style: none;
     margin-bottom: 2rem;
+    cursor: not-allowed;
 }
 .trendText{
     margin-bottom: 1rem;

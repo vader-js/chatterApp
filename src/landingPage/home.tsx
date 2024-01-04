@@ -24,6 +24,7 @@ export default function Home() {
   const feeds = feedbacks as feedback[];
 
 
+
 // useEffect(() => {
 //     const interval = setInterval(() => {
 //       if (idNum === feeds.length) {

@@ -4,13 +4,15 @@ import {auth} from '../main/firebase/firebaseConfig'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../app/authSlice'
 import { useNavigate } from 'react-router-dom'
-import {notification } from 'antd';
+import {Button, notification } from 'antd';
 
 
 export default function Login() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [loading, setloading] = useState(false);
+    const [p_type, set_p_type] = useState(false);
 
     const [userLogIn, setUserLogIn] = useState({
         email: "",
@@ -27,19 +29,23 @@ export default function Login() {
   
     const handleLogIn = async (e: React.MouseEvent<HTMLElement>)=>{
         e.preventDefault();
+        setloading(true);
        await signInWithEmailAndPassword(auth, userLogIn.email, userLogIn.pword)
         .then((result)=> {
             const {user:{email, uid}} = result;
             
             dispatch(setUser({email, uid}));
+            setloading(false);
             notification.success({
                 message: 'Success',
                 description: 'User logged in successfully',
             });
-         navigate("/home");
+         setTimeout(() => {
+            navigate("/home");
+         }, 4000);
         })
         .catch((error)=> {
-            console.log({error})
+            setloading(false)
             notification.error({
                 message: 'Error',
                 description: `${error?.code}`,
@@ -58,9 +64,17 @@ export default function Login() {
             </div>
             <div className="loginPassword">
                 <label htmlFor="pword" className="passwordlabel">Password</label>
-                <input type="password" name="pword" id="pword" value={userLogIn.pword} onChange={(e)=> handleInputs(e)} />
+                <input type={p_type ? 'text' : 'password'} name="pword" id="pword" value={userLogIn.pword} onChange={(e)=> handleInputs(e)} />
+               
             </div>
-            <input type="submit" value="Log in" onClick={(e)=> handleLogIn(e)}/>
+            <div className="checkpassword">
+            <input type="checkbox" name="pcheck" id="pcheck" checked={p_type} onChange={()=> set_p_type(!p_type)} />
+            <label htmlFor="pcheck" className="passwordcheck"> show password</label> 
+            </div>
+            {/* <input type="submit" value="Log in" onClick={(e)=> handleLogIn(e)}/> */}
+            <Button loading={loading} onClick={(e)=> handleLogIn(e)} className='login_button'>
+            Log in
+        </Button>
         </form>
     </main>
   )

@@ -16,7 +16,7 @@ export default function Auth() {
   return (
     <main className="authContainer">
         <section className="authimage">
-            <img src={authImage} alt="" />
+            <img src={authImage} alt="" className="authimage_img"/>
             <div className="imagetext">
                 <h1><sup>vader </sup>CHATTER</h1>
                 <p>Unleash the power of words, connect with like-minded readers and writers</p>

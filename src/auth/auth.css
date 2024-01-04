@@ -11,7 +11,7 @@
     position: relative;
     background: rgba(0, 0, 0, 0.55);
 }
-.authimage img{
+.authimage_img{
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -131,9 +131,13 @@
 .email, .password,.Cpassword, .loginEmail, .loginPassword{
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+.password{
+    margin-bottom: 0.7rem;
 }
 
-.registerForm input[type="text"], .registerForm input[type="email"], .registerForm input[type="password"], .registerForm select, .loginForm input[type="email"], .loginForm input[type="password"]{
+.registerForm input[type="text"], .registerForm input[type="email"], .registerForm input[type="password"], .registerForm select, .loginForm input[type="email"], .loginForm input[type="password"], .loginForm input[type="text"]{
     width: 100%;
     border: 1px solid #CED4DA;
     border-radius: 8px;
@@ -165,6 +169,23 @@
     margin: 2rem 0;
     cursor: pointer;
 }
+.login_button, .register_button{
+    width: 100%;
+    height: 40px;
+    background: #543EE0;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    margin: 2rem 0;
+    cursor: pointer;
+
+}
+.login_button span, .register_button span{
+    color: white !important;
+}
 .googleRegister{
     border: 1px solid #D0D0D0;
     border-radius: 8px;
@@ -178,4 +199,25 @@
 }
 .googleRegister span{
     margin-right: 1rem;
+}
+.checkpassword{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+#pcheck{
+    font-size: 16px;
+}
+.passwordcheck{
+    margin:0 10px !important;
+}
+.password_toggle, .Cpassword_toggle{
+    position: relative;
+}
+.password_vis_toggle, .Cpassword_vis_toggle{
+    position: absolute;
+    top: 22%;
+    right: 15px;
+    font-size: 18px;
 }

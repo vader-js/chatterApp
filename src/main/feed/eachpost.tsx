@@ -1,13 +1,14 @@
 import {
+  Timestamp,
     arrayRemove,
     arrayUnion,
     collection,
+    deleteDoc,
     doc,
     getDoc,
-    getDocs,
-    increment,
     onSnapshot,
     query,
+    serverTimestamp,
     updateDoc,
     where,
   } from "firebase/firestore";
@@ -22,21 +23,42 @@ import {
   import {BsBookmarks, BsFillBookmarksFill} from 'react-icons/bs'
   import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
   import { db, storage } from "../firebase/firebaseConfig";
-  import { useEffect, useState } from "react";
-  import { useSelector } from "react-redux";
-  import { useDownloadimage, useGetDoc, useGetUserDoc } from "../Helpers/hooks";
-  import { Link } from "react-router-dom";
+  import { useEffect, useState, useRef } from "react";
+  import { useDispatch, useSelector } from "react-redux";
+  import { useDownloadProfileImage, useDownloadimage, useGetDoc, useGetUserDoc } from "../Helpers/hooks";
+  import { Link, useLocation } from "react-router-dom";
   import ReactTimeAgo from "react-time-ago";
 import { ref } from "firebase/storage";
+import { TfiLayoutMenuSeparated } from "react-icons/tfi";
+import { Popconfirm } from "antd";
+import { PrevInview, updateInview } from "../../app/authSlice";
+import './feed.css'
 
 
- function EachPost({ post, handleLike, userRef }: any) {
+
+ function EachPost({ post, handleLike, userRef, fullName, profession, set_current_view, current_view}: any) {
+
+
     const { getDocument } = useGetDoc();
     // const {getUserDoc} = useGetUserDoc();
     const [isComment, setIsComment] = useState(false);
     const [comment, setComment] = useState("");
     const [image, setImage] = useState('')
+    const [profileImage, setProfileImage] = useState('')
+    const [menu_display, set_menu_display] = useState(false)
+    const [post_delete_load, set_post_delete_load] = useState(false)
+    const [to_view, set_to_view] = useState()
+
+    const dispatch = useDispatch();
+
+    const {user: {inview}} = useSelector((state: any)=> state.reducer.user)
+   
+    // console.log({location})
+
     const {downloadImage} = useDownloadimage()
+
+          // download profile image
+const {downloadProfileImage} = useDownloadProfileImage();
   
     
     const handleComment = (e: React.FormEvent<HTMLInputElement>) => {
@@ -46,14 +68,10 @@ import { ref } from "firebase/storage";
     const handleIsComment = async (post: any, comment: string) => {
       try {
         const { postDoc, postRef } = await getDocument(post.id);
-        // const {userDoc, userCollectionRef} = await getUserDoc(userRef)
-        const userRefs = doc(db, "users", userRef);
+        const current_time = new Date()
         if (comment && postRef) {
           await updateDoc(postRef, {
-            comments: arrayUnion(comment),
-          });
-          await updateDoc(userRefs, {
-            comments: arrayUnion(comment),
+            comments: arrayUnion({fullName, comment, current_time}),
           });
           console.log("comment successfully updated");
           setComment("");
@@ -66,19 +84,22 @@ import { ref } from "firebase/storage";
     };
     const handleBookmark = async() => {
       try{
-        const {postDoc, postRef} = await getDocument(post.id)
+        const {postDoc, postRef} = await getDocument(post.id)  
+        const post_id = post.id;
         if (postDoc.exists()){
+          const current_time = new Date();
           let filteredDocs = postDoc
           .data()
-          .bookmarks.filter((doc) => doc === userRef);
-        console.log({ filteredDocs });
+          .bookmarks.filter((doc) => doc.userRef === userRef);  
         if (filteredDocs.length) {
+          let bookmark_to_remove = filteredDocs[0]
+          // console.log({bookmark_time})
           await updateDoc(postRef, {
-            bookmarks: arrayRemove(userRef),
+            bookmarks: arrayRemove(bookmark_to_remove),
           });
         } else {
           await updateDoc(postRef, {
-            bookmarks: arrayUnion(userRef),
+            bookmarks: arrayUnion({userRef, current_time, post_id}),
           });
         }
   
@@ -91,12 +112,71 @@ import { ref } from "firebase/storage";
     //   let {downloadUrl} = downloadImage(post.id)
     //   setImage(downloadUrl)
     // }
+    const feedRef = useRef(null);
+
     useEffect(() => {
-    // let imageRef = ref(storage, `postImage/${post.postedById}`)
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      };
+  
+      const handleIntersection = (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+              set_current_view(entry.target.id);
+            // Here, you can update your state or Redux store with the ID of the feed in the middle
+          }
+        });
+  
+      };
+      const observer = new IntersectionObserver(handleIntersection, options);
+    
+      if (feedRef.current) {
+        observer.observe(feedRef.current);
+      }
+    
+      return () => {
+        if (feedRef.current) {   
+          observer.unobserve(feedRef.current);
+        }
+      };
+    }, []);
+
+
+    // useEffect(() => {    
+    //         const targettedPost = document.getElementById(`${inview}`);
+    //         if (targettedPost) {
+    //           targettedPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    //           targettedPost.classList.add('currentView')
+    //           setTimeout(()=>{
+    //             targettedPost.classList.remove('currentView')
+    //           }, 3000)
+    //         }
+
+    // }, [inview]);
+
+
+
+  useEffect(() => {    
+    const targettedPost = document.getElementById('170179953038033112746580382213')
+    if (targettedPost) {
+      targettedPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      targettedPost.classList.add('currentView')
+      setTimeout(()=>{
+        targettedPost.classList.remove('currentView')
+      }, 3000)
+    }
+
+}, []);
+   
+ 
+  
+    useEffect(() => {
     if(post.image){
       const fetchData = async () => {
         let downloadUrl = await downloadImage(post.postedById);
-        console.log({downloadUrl})
+        // console.log({downloadUrl})
         if (downloadUrl) {
           setImage(downloadUrl);
         }
@@ -105,19 +185,56 @@ import { ref } from "firebase/storage";
       fetchData();
     }
     }, []);
+
+    useEffect(() =>{
+      const fetchData = async () => {
+        const profile_image = await downloadProfileImage(post.userId);
+        if (profile_image) {
+          setProfileImage(profile_image)
+          // dispatch(setUserProfileImage(profile_image))
+        }}
+        fetchData();
+    },[post.userId])
+
+    useEffect( () =>{
+      const fetchData = async () =>{
+        const {postDoc, postRef} = await getDocument(post.id)
+       if(post.userId === userRef){
+        await updateDoc(postRef, {profession, name : fullName})
+       }
+      }
+      fetchData();
+    }, [post, profession, fullName, userRef])
+
+    const confirm = async (id)=>{
+      const getPost = collection(db, "posts");
+      const querry = query(getPost, where("postedById", "==", `${id}`));
+      const unSubscribe =  onSnapshot(querry, (querySnapShot) => {
+        querySnapShot.forEach( async (docs) => {
+          await deleteDoc(doc(db, "posts", docs.id));
+        });
+      });
+    }
+    const confirm_delete = async (id: string)=>{
+      return confirm(id).then(() => {});
+    }
+
+
     return (
-      <main className="post" key={post.id}>
+      <main className='eachpost_main' key={post.id} ref={feedRef} id={`${post.id}`}>
         <section className="feed_head">
           <div className="image_container">
-            {/* <img src="" alt="" /> */}
-            <ProfileCircle size="75" />
+           {
+            profileImage ? <img src={profileImage} alt="profile" className="post_profile" />:  <ProfileCircle size="75" />
+           } 
+           
           </div>
           <div className="image_profile">
             <div className="profile_name">{post.name}</div>
             <div className="profile_desc">
-             <p>product designer{" "}</p> 
+             <p>{post.profession ? post.profession : 'redacted'}</p> 
               <span className="profile_time">
-                {post.createdAt && (
+                {!post.createdAt && (
                   <ReactTimeAgo
                     date={post.createdAt.toDate()}
                     locale="en-US"
@@ -128,9 +245,34 @@ import { ref } from "firebase/storage";
               </span>
             </div>
           </div>
+          <span className="post_menu" onClick={()=> set_menu_display(!menu_display)}>
+          <TfiLayoutMenuSeparated />
+          </span>
+          <span className={menu_display? "post_menu_display": "post_menu_display_none"}>
+          {
+           post.userId === userRef ? <ul className="self_menu_lists">
+            <li className="self_menu_list">Share post</li>
+            <li className="self_menu_list">
+            <Popconfirm
+        placement="bottom"
+        title="Delete Post?"
+        description='Are you sure you want to Delete this post?'
+        onConfirm={ async () => {
+          await confirm_delete(post.postedById);}}
+        okText="Yes"
+        cancelText="No"
+      >
+              Delete post
+              </Popconfirm>
+              </li>
+           </ul> : <ul className="non_self_menu_lists">
+            <li className="non_self_menu_list"> Share post</li>
+           </ul>
+          }
+          </span>
         </section>
-        <section className="feed_title">
-          <h2>{post.title}</h2>
+        <section className="feed_title" onClick={()=> set_menu_display(false)}>
+          <h2>{post.title}  - {post.id}</h2>
           <div>
             <span>
               <Book1 size="18" />
@@ -141,14 +283,14 @@ import { ref } from "firebase/storage";
             mins read
           </div>
         </section>
-        <section className="profile_body">
+        <section className="profile_body" onClick={()=> set_menu_display(false)}>
           {/* Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo eos maiores magni doloribus, 
               optio impedit fugiat! Nisi fugiat beatae deleniti consequatur aliquam voluptatem est quibusdam
                illum sint dignissimos! Possimus, neque. */}
           {post.body.split(" ").length > 35 ? (
             <p>
               {post.body.split(" ").slice(0, 35).join(" ")}{" "}
-              <Link to="/home/feed" state={{ post }} className="see_more">
+              <Link to={`/home/feed/${post.id}`} state={{ post, profileImage, fullName, image}} className="see_more">
                 ...see more
               </Link>
             </p>
@@ -163,7 +305,7 @@ import { ref } from "firebase/storage";
         </section>
         <section className="profile_info">
           <div className="profile_comment">
-            <span className="info_icon" onClick={() => setIsComment(true)}>
+            <span className="info_icon" onClick={() => setIsComment(!isComment)}>
               <MessageNotif size="18" />
             </span>
             {post.comments ? post?.comments?.length : 0}
@@ -183,7 +325,7 @@ import { ref } from "firebase/storage";
             <span className="info_icon bookmark"
             onClick={handleBookmark}>
               {
-                post.bookmarks.indexOf(userRef) === -1 ? <BsBookmarks size={18} /> : <BsFillBookmarksFill size={18} color='#543EE0'/>
+                post.bookmarks.filter((book: any)=> book.userRef === userRef).length > 0 ? <BsFillBookmarksFill size={18} color='#543EE0'/> :  <BsBookmarks size={18} />
               }
             </span>
           {post.bookmarks.length}
@@ -192,7 +334,7 @@ import { ref } from "firebase/storage";
             <span className="info_icon">
               <Activity size="18" />
             </span>
-            {post.views} views
+            {post?.views.length} views
           </div>
         </section>
         {isComment && (
@@ -207,12 +349,12 @@ import { ref } from "firebase/storage";
                           <ProfileCircle size="22" />
                         </span>
                         <div className="com_info">
-                          <span className="com_name">{post.name}</span>
-                          <span className="com_main">{com}</span>
+                          <span className="com_name">{com.fullName}</span>
+                          <span className="com_main">{com.comment}</span>
                         </div>
                         <span className="com_like">
                           {" "}
-                          <Lovely size="20" />
+                          <AiOutlineHeart size={18}/>
                         </span>
                       </li>
                     );

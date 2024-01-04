@@ -7,6 +7,7 @@ import {removeUser} from "../../../app/authSlice"
 import { useDispatch } from "react-redux"
 import "./sidebar.css"
 import { Popconfirm } from "antd"
+import { persistor } from "../../../app/store"
 
 export default function Sidebar() {
 
@@ -22,11 +23,12 @@ const active: style = {
 
 const handleSignOut= async ()=>{
   await signOut(auth);
-  dispatch(removeUser())
+  dispatch(removeUser());
+  persistor.purge();
   navigate('/')
 }
-const confirm =()=>{
-  handleSignOut();
+const confirm = async ()=>{
+ await handleSignOut();
 }
   return (
     <main className="sidebarContainer">
@@ -123,7 +125,7 @@ const confirm =()=>{
         placement="top"
         title="Log out?"
         description='Are you sure you want to log out'
-        onConfirm={confirm}
+        onConfirm={async()=> await confirm()}
         okText="Yes"
         cancelText="No"
       >

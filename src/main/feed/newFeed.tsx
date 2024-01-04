@@ -10,6 +10,7 @@ import {
   doc,
   getDocs,
   query,
+  serverTimestamp,
   setDoc,
   updateDoc,
   where,
@@ -18,6 +19,7 @@ import { db } from "../firebase/firebaseConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserRef } from "../../app/authSlice";
 import { useUploadImage } from "../Helpers/hooks";
+import { Button } from "antd";
 
 export default function NewFeed({ setNewPost }: any) {
   type User = {
@@ -32,7 +34,9 @@ export default function NewFeed({ setNewPost }: any) {
     }
   }
   type userState = {
-    user: User
+    reducer: {
+      user: User
+    }  
   }
   const apiKey = import.meta.env.VITE_TINY_KEY;
   const dispatch = useDispatch();
@@ -41,7 +45,8 @@ export default function NewFeed({ setNewPost }: any) {
   const [docId, setDocId] = useState("")
   const [isEditorLoaded, setIsEditorLoaded] = useState(false)
   const [image, setimage] = useState("")
-  const { user } = useSelector((state: userState) => state.user);
+  const { user } = useSelector((state: userState) => state.reducer.user);
+  const [button_load, setbutton_load] = useState(false)
   const {uploadImageToStorage} = useUploadImage()
 
   function generateUniqueId() {
@@ -60,42 +65,23 @@ export default function NewFeed({ setNewPost }: any) {
     return uniqueId;
   };
  
-  const log = () => {
+  const log = async () => {
+    setbutton_load(true);
     if (editorRef.current) {
-      console.log(editorRef.current.getContent().replace(/<\/?[^>]+(>|$)/g, ""));
+// Check if there is content in the editor
+const editorContent = editorRef.current.getContent().replace(/<\/?[^>]+(>|$)/g, "");
+    
+if (editorContent.length > 0) {
       let Img = editorRef.current.dom.select('img')
       const UniqueId = generateUniqueId();
-
-      const createPost = async () => {
-          try {
-           
-            await updateDoc(doc(db, 'users', user.userRef), {
-              post: arrayUnion({
-                title: title,
-                body: editorRef.current.getContent().replace(/<\/?[^>]+(>|$)/g, ""),
-                createdAt: new Date(),
-                bookmark: false,
-                bookmarks:[],
-                id: UniqueId,
-                likedBy: [],
-                likes: 0,
-                comment:[],
-                views: 0,
-                name: user.fullName
-              }),
-            });
-            console.log('Post added successfully');
-          } catch (error) {
-            console.error('Error adding post:', error);
-          }
           try {
             if(image){
               const {upload} = await uploadImageToStorage({image, UniqueId})
             }
             await addDoc(collection(db, 'posts'),{
               title,
-              body: editorRef.current.getContent().replace(/<\/?[^>]+(>|$)/g, ""),
-              createdAt: new Date(),
+              body: editorContent,
+              createdAt: serverTimestamp(),
               bookmark: false,
               bookmarks:[],
               postedById: UniqueId,
@@ -103,19 +89,21 @@ export default function NewFeed({ setNewPost }: any) {
               likedBy: [],
               likes: 0,
               comment:[],
-              views: 0,
+              views: [],
               image: Img.length > 0 ? true: false ,
               name: user.fullName,
               userId: user.userRef,
             })
+            editorRef.current.setContent('');
           }catch (error) {
             console.log("error creating post db")
           }
-        }
-      createPost();
       setTitle('');
-      editorRef.current.setContent('');
+      setbutton_load(false);
+     setNewPost(false);
     }
+  }
+    setbutton_load(false);
   };
   const editorInit = (ext, editor) => {
     setIsEditorLoaded(true);
@@ -237,7 +225,9 @@ export default function NewFeed({ setNewPost }: any) {
       />
       {/* <button onClick={log}>Log editor content</button> */}
       <div className="post_button">
-       {isEditorLoaded && <button onClick={log}>post</button>}
+       {isEditorLoaded && <Button onClick={log}
+       loading={button_load}
+       className="new_post_button">post</Button>}
       </div>
     </>
   );
