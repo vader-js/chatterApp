@@ -58,6 +58,7 @@ export const userSlice: any = createSlice({
         userRef: '',
         profession: '',
         bio: '',
+        profileImage: '',
       };
     },
     setUserRef: (state, action) => {
@@ -83,8 +84,13 @@ export const userSlice: any = createSlice({
     },
     
     updatePostNo: (state,action)=>{
+      // const update = state.user.post_no + action.payload;
+      // const user_state = state.user
+      // sessionStorage.setItem('user', JSON.stringify({...user_state, post_no: update}))
+      // const postNo = JSON.parse(sessionStorage.getItem('post_no') as string).post_no
+      // console.log('postNo', postNo)
+      // state.user.post_no = postNo;
       state.user.post_no = state.user.post_no + action.payload
-
       },
       updateInview: (state,action)=>{
         state.user.inview = action.payload

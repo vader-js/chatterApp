@@ -102,6 +102,7 @@ export default function Register() {
              setTimeout(() => {
                 navigate("/home");
              }, 4000);
+             setloading(false);
             }
             )
             .catch((error)=> {
@@ -142,6 +143,7 @@ export default function Register() {
                         });
                         break;
                 }
+                setloading(false);
                 return
             })
         }
@@ -205,7 +207,6 @@ export default function Register() {
             <span><img src={google} alt="google" /></span>
             Sign Up with Google
         </button>
-        <span>{errorMessage}</span>
     </main>
   )
 }

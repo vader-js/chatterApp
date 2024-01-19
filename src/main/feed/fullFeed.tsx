@@ -84,7 +84,8 @@ export default function FullFeed() {
 
   useEffect(() =>{
     dispatch(updateInview(post.id));
-  },[]);
+    console.log('postId', post.id)
+  },[post]);
 
   const handleComment = (e: React.FormEvent<HTMLInputElement>) => {
     setComment(e.currentTarget.value);

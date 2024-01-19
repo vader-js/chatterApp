@@ -7,8 +7,10 @@ import {
   addDoc,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDocs,
+  onSnapshot,
   query,
   serverTimestamp,
   setDoc,
@@ -20,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserRef } from "../../app/authSlice";
 import { useUploadImage } from "../Helpers/hooks";
 import { Button } from "antd";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function NewFeed({ setNewPost }: any) {
   type User = {
@@ -40,12 +43,15 @@ export default function NewFeed({ setNewPost }: any) {
   }
   const apiKey = import.meta.env.VITE_TINY_KEY;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { state} = useLocation();
   const editorRef = useRef<any>(null);
   const [title, setTitle] = useState("");
   const [docId, setDocId] = useState("")
   const [isEditorLoaded, setIsEditorLoaded] = useState(false)
   const [image, setimage] = useState("")
   const { user } = useSelector((state: userState) => state.reducer.user);
+
   const [button_load, setbutton_load] = useState(false)
   const {uploadImageToStorage} = useUploadImage()
 
@@ -64,6 +70,50 @@ export default function NewFeed({ setNewPost }: any) {
   
     return uniqueId;
   };
+
+  const back = async ()=>{
+    const editorContent = editorRef.current.getContent()
+    if(!state){
+      if(title || editorContent){
+       await drafts()
+      }
+    }
+    navigate(-1);
+  }
+
+  useEffect(()=>{
+    if (state){
+      if(state.title){
+        setTitle(state.title)
+      }
+        if(state.body && editorRef.current){
+      const new_content = `<p>${state.body}</p>`
+      editorRef.current.setContent(new_content)
+    }
+    }
+  
+  },[state, editorRef.current]);
+
+  const drafts = async ()=>{
+    const editorContent = editorRef.current.getContent().replace(/<\/?[^>]+(>|$)/g, "");
+    const time = new Date();
+    await addDoc(collection(db, 'drafts'), {
+      title,
+      createdAt: time.toDateString(),
+      body: editorContent,
+      userRef: user.userRef,
+      draftId: generateUniqueId()
+    })
+  }
+  const Delete_draft = async (id)=>{
+    const getDraft = collection(db, "drafts");
+    const querry = query(getDraft, where("draftId", "==", `${id}`));
+    const unSubscribe =  onSnapshot(querry, (querySnapShot) => {
+      querySnapShot.forEach( async (docs: any) => {
+        await deleteDoc(doc(db, "drafts", docs.id));
+      });
+    });
+  }
  
   const log = async () => {
     setbutton_load(true);
@@ -78,10 +128,11 @@ if (editorContent.length > 0) {
             if(image){
               const {upload} = await uploadImageToStorage({image, UniqueId})
             }
+            const time = new Date();
             await addDoc(collection(db, 'posts'),{
               title,
               body: editorContent,
-              createdAt: serverTimestamp(),
+              createdAt: time,
               bookmark: false,
               bookmarks:[],
               postedById: UniqueId,
@@ -93,12 +144,17 @@ if (editorContent.length > 0) {
               image: Img.length > 0 ? true: false ,
               name: user.fullName,
               userId: user.userRef,
+            }).then(async () => {
+              editorRef.current.setContent('');
+              setTitle('');
+           await Delete_draft(state.draftId);
+
             })
-            editorRef.current.setContent('');
+            
           }catch (error) {
             console.log("error creating post db")
           }
-      setTitle('');
+      
       setbutton_load(false);
      setNewPost(false);
     }
@@ -106,8 +162,9 @@ if (editorContent.length > 0) {
     setbutton_load(false);
   };
   const editorInit = (ext, editor) => {
-    setIsEditorLoaded(true);
+    // setIsEditorLoaded(true);
     editorRef.current = editor;
+    setIsEditorLoaded(true);
   }
   useEffect(()=>{
     const usersCollectionRef = collection(db, "users");
@@ -134,8 +191,8 @@ if (editorContent.length > 0) {
     setTitle(e.currentTarget.value);
   };
   return (
-    <>
-      <h3 className="back" onClick={() => setNewPost(false)}>
+    <main className="new_feed_main">
+      <h3 className="back" onClick={back}>
         {" "}
         <span>
           <Back size="25" />
@@ -229,6 +286,6 @@ if (editorContent.length > 0) {
        loading={button_load}
        className="new_post_button">post</Button>}
       </div>
-    </>
+    </main>
   );
 }

@@ -57,6 +57,10 @@
     margin-right: 3px;
     color: inherit;
 }
+.new_feed_link{
+    color: inherit;
+    text-decoration: none;
+}
 .eachpost_main{
     width: 100%;
     height: auto;
@@ -384,4 +388,18 @@
 }
 .full_profile_info div{
     display: flex;
+}
+.load_more{
+    width: max-content;
+    padding: 8px 5px;
+    margin: 0 auto;
+    border: 2px solid rgba(116, 92, 210, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    color: #543EE0;
+    font-size: 13px;
+}
+.load_more:hover{
+    background: #543EE0;
+    color: #fff;
 }

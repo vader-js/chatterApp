@@ -38,158 +38,50 @@ export default function ForYouFeeds() {
   const { user: { userRef, fullName, profession, post_no, inview, p_inview},
 } = useSelector((state: any) => state.reducer.user);
 
-const {
-  posts : cachedPosts,
-} = useSelector((state: any) => state.reducer.posts);
+// const {
+//   posts : cachedPosts,
+// } = useSelector((state: any) => state.reducer.posts);
 
 
   const [posts, setPosts] = useState([]);
-  const [selected_post, set_selected_post] = useState(post_no);
+  const [selected_post, set_selected_post] = useState([]);
   const [liked, setLiked] = useState(false);
   const { getDocument } = useGetDoc();
   const { getUserDoc } = useGetUserDoc();
   const [load, setload] = useState(false);
-  const [to_view, set_to_view]= useState('')
-  const [current_view, set_current_view] = useState('')
-  const [prev_view, set_prev_view] = useState('')
+  const [post_to_display, set_post_to_display] = useState(15)
 
- 
-
-  
 
   const dispatch = useDispatch()
   
   useEffect(() => {
     setload(true);
-    // setPosts(cachedPosts)
     const getPost = collection(db, "posts");
-    const unSubscribe = onSnapshot(getPost, (querySnapShot) => {
+    const unSubscribe = onSnapshot(getPost, async (querySnapShot) => {
       const post = [] as any;
       querySnapShot.forEach((doc) => {
-        const postData = doc.data();
+        const postData = doc.data(); 
         post.push(postData);
       });
-      const post_selected = post.sort((a,b)=> b.createdAt - a.createdAt).slice(0, selected_post);
-      console.log({post_selected})
-      // dispatch(setCachedPosts(post_selected));
-      if(JSON.stringify(post_selected) != JSON.stringify(cachedPosts)) {
-        dispatch(setCachedPosts(post_selected));
-        // console.log({selected_post})
-      }
+      setPosts(post);
       setload(false);
     });
     return () => {
       unSubscribe();
     };
-  }, [post_no, selected_post]);
+  }, []);
 
   useEffect(() => {
-    console.log({current_view})
-  // set_prev_view(current_view);
-  },[current_view]);
-
-  // useEffect(() => {
-  //   // set_to_view(inview)
-  //   console.log({p_inview})
-  //   if(p_inview){ 
-  //   const targettedPost = document.getElementById(p_inview)
-  //   if(targettedPost){ 
-  //     targettedPost?.scrollIntoView({behavior: 'smooth', block: 'start'  });
-   
-  //     console.log({targettedPost});
-  //   }
-  // }
-  // },[p_inview, posts]);
-
-
-  // useEffect(() => {
-  //   return ()=>{
-  //     console.log("Cleanup - current_view:", current_view);
-  //     set_prev_view(current_view);
-  //     console.log("Cleanup - prev_view:", prev_view);
-  //     dispatch(PrevInview(prev_view))
-  //   }
-  // },[current_view, dispatch]);
-
-
-  useEffect(() =>{
-    return ()=>{
-      add_inview()
+    const post_selected = posts.sort((a,b)=> b.createdAt - a.createdAt).slice(0, post_to_display);
+      set_selected_post(post_selected);
+    if(post_no > 15){
+      const post_select = posts.sort((a,b)=> b.createdAt - a.createdAt).slice(0, post_to_display);
+      const new_posts = posts.sort((a,b)=> b.createdAt - a.createdAt).slice(0, post_no);
+      const difference = new_posts.filter((new_post) => !post_select.includes(new_post))
+      set_selected_post(prevSelectedPost => [...prevSelectedPost, ...difference]);
+      set_post_to_display(post_no);
     }
-  },[])
-
-  const add_inview = () =>{
-    dispatch(updateInview(current_view))
-  }
-  // const updateCurrentView = async () => {
-  //   try {
-  //     await updateDoc(doc(db, 'users', userRef), {
-  //       current_view: current_view,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error updating current_view:", error);
-  //   }
-  // };
-
-//   useEffect(() => {    
-//     const targettedPost = document.getElementById('170179953038033112746580382213')
-//     if (targettedPost) {
-//       targettedPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
-//       targettedPost.classList.add('currentView')
-//       setTimeout(()=>{
-//         targettedPost.classList.remove('currentView')
-//       }, 3000)
-//     }
-
-// }, []);
-
-useEffect(() =>{
-  setPosts(cachedPosts)
-  console.log([cachedPosts])
-},[cachedPosts]);
-
-  // const handleLike = async (post : any) => {
-  //     const postCollectionRef = collection(db, 'posts');
-  //     const q = query(postCollectionRef, where('id', '==', post.id));
-  //     const querySnapShot = await getDocs(q)
-  //     let documentId = ''
-  //     if (!querySnapShot.empty){
-  //         querySnapShot.forEach((docs)=>{
-  //             documentId = docs.id
-  //         })
-  //     }
-  //     const postRef = doc(db, 'posts',documentId);
-  //     const postDoc = await getDoc(postRef);
-
-  //             if (postDoc.exists()) {
-  //                 let filteredDocs = postDoc.data().likedBy.filter((doc: any) => doc === userRef);
-  //                 console.log({ filteredDocs})
-  //                 if(filteredDocs.length){
-  //                     setLiked(false);
-  //                     await updateDoc(postRef, {
-  //                         likedBy: arrayRemove(userRef)
-  //                     })
-  //                     if (postDoc.data().like <= 0){
-  //                         return
-  //                     }else{
-  //                         await updateDoc(postRef, {
-  //                             likes: increment(-1)
-  //                         })
-  //                     }
-  //                 }else{
-  //                     await updateDoc(postRef,{
-  //                         likedBy: arrayUnion(userRef)
-  //                     })
-  //                     setLiked(true);
-  //                          //  update the 'likes' count
-  //                          await updateDoc(postRef, {
-  //                             likes: increment(1)
-  //                         });
-  //                 }
-
-  //     }
-
-  // }
+  },[posts, post_no]);
 
   const handleLike = async (post: any) => {
     try {
@@ -254,8 +146,9 @@ useEffect(() =>{
   
   }, [posts]);
 
-  const loadMore =() => {
-    dispatch(updatePostNo(15))
+  const loadMore = async () => {
+   await dispatch(updatePostNo(15));
+   
   }
   return (
     <main className="foryou_main">
@@ -274,8 +167,8 @@ useEffect(() =>{
         <SkeletonUi numRows={4}/>
         </div>
         </>:
-      posts
-        ? posts.map((post: any) => {
+      selected_post
+        ? selected_post.map((post: any) => {
             return (
               <EachPost
                 key={post.id}
@@ -284,12 +177,17 @@ useEffect(() =>{
                 userRef={userRef}
                 fullName={fullName}
                 profession={profession}
-                set_current_view={set_current_view}
-                current_view={current_view}
-              />
+              /> 
             );
           })
-        : null}
+       
+        : null
+        }
+      {posts.length != selected_post.length ?  <div className="load_more" onClick={loadMore}>   
+        load more post ...
+      </div>: null
+     }
+     
     </main>
   );
 }

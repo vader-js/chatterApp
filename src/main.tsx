@@ -22,6 +22,8 @@ import Bookmarks from './main/bookmarks/bookmarks.tsx'
 import { onAuthStateChanged } from 'firebase/auth'
 import Authentication from './auth/Authentication.tsx'
 import Account from './main/account/account.tsx'
+import NewFeed from './main/feed/newFeed.tsx'
+import Draft from './main/drafts/draft.tsx'
 
 const router = createBrowserRouter(
   [
@@ -80,7 +82,7 @@ const router = createBrowserRouter(
     },
     {
       path: "/home/drafts",
-      element: <div>Drafts</div>
+      element: <Draft />
     },
     {
       path: "/home/analytics",
@@ -93,6 +95,10 @@ const router = createBrowserRouter(
     {
       path: "/home/notifications",
       element: <div>Notifications</div>
+    },
+    {
+      path: '/home/newfeed',
+      element: <NewFeed/>
     }
   ]
 }

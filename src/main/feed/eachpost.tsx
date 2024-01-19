@@ -36,7 +36,7 @@ import './feed.css'
 
 
 
- function EachPost({ post, handleLike, userRef, fullName, profession, set_current_view, current_view}: any) {
+ function EachPost({ post, handleLike, userRef, fullName, profession}: any) {
 
 
     const { getDocument } = useGetDoc();
@@ -60,7 +60,11 @@ import './feed.css'
           // download profile image
 const {downloadProfileImage} = useDownloadProfileImage();
   
-    
+const dateConverter = (date: string)=>{
+  const time = new Date(date)
+  return time
+}
+
     const handleComment = (e: React.FormEvent<HTMLInputElement>) => {
       setComment(e.currentTarget.value);
       console.log({ comment });
@@ -114,34 +118,34 @@ const {downloadProfileImage} = useDownloadProfileImage();
     // }
     const feedRef = useRef(null);
 
-    useEffect(() => {
-      const options = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.5,
-      };
+    // useEffect(() => {
+    //   const options = {
+    //     root: null,
+    //     rootMargin: '0px',
+    //     threshold: 0.5,
+    //   };
   
-      const handleIntersection = (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-              set_current_view(entry.target.id);
-            // Here, you can update your state or Redux store with the ID of the feed in the middle
-          }
-        });
+    //   const handleIntersection = (entries) => {
+    //     entries.forEach((entry) => {
+    //       if (entry.isIntersecting) {
+    //           set_current_view(entry.target.id);
+    //         // Here, you can update your state or Redux store with the ID of the feed in the middle
+    //       }
+    //     });
   
-      };
-      const observer = new IntersectionObserver(handleIntersection, options);
+    //   };
+    //   const observer = new IntersectionObserver(handleIntersection, options);
     
-      if (feedRef.current) {
-        observer.observe(feedRef.current);
-      }
+    //   if (feedRef.current) {
+    //     observer.observe(feedRef.current);
+    //   }
     
-      return () => {
-        if (feedRef.current) {   
-          observer.unobserve(feedRef.current);
-        }
-      };
-    }, []);
+    //   return () => {
+    //     if (feedRef.current) {   
+    //       observer.unobserve(feedRef.current);
+    //     }
+    //   };
+    // }, []);
 
 
     // useEffect(() => {    
@@ -158,17 +162,18 @@ const {downloadProfileImage} = useDownloadProfileImage();
 
 
 
-  useEffect(() => {    
-    const targettedPost = document.getElementById('170179953038033112746580382213')
+  useEffect(() => {
+    const targettedPost = document.getElementById(`${inview}`)
     if (targettedPost) {
       targettedPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
       targettedPost.classList.add('currentView')
       setTimeout(()=>{
-        targettedPost.classList.remove('currentView')
-      }, 3000)
+        targettedPost.classList.remove('currentView');
+        dispatch(updateInview(''));
+      }, 4000)
     }
-
-}, []);
+    
+}, [inview]);
    
  
   
@@ -234,9 +239,9 @@ const {downloadProfileImage} = useDownloadProfileImage();
             <div className="profile_desc">
              <p>{post.profession ? post.profession : 'redacted'}</p> 
               <span className="profile_time">
-                {!post.createdAt && (
+                {post.createdAt && (
                   <ReactTimeAgo
-                    date={post.createdAt.toDate()}
+                    date={post?.createdAt.toDate()}
                     locale="en-US"
                     timeStyle="round-minute"
                     className="timestamp"
@@ -272,7 +277,7 @@ const {downloadProfileImage} = useDownloadProfileImage();
           </span>
         </section>
         <section className="feed_title" onClick={()=> set_menu_display(false)}>
-          <h2>{post.title}  - {post.id}</h2>
+          <h2>{post.title}</h2>
           <div>
             <span>
               <Book1 size="18" />

@@ -6,6 +6,7 @@ import NewFeed from './newFeed'
 import ForYouFeeds from './forYouFeeds'
 import Featured from './Featured'
 import Recent from './Recent'
+import { Link } from 'react-router-dom'
 // import { useSelector } from "react-redux/es/hooks/useSelector"
 
 export default function Feed() {
@@ -37,8 +38,7 @@ export default function Feed() {
     <motion.main
     transition={{delay: 1}}
     className="feedContainer">
-      {
-        !newPost ? 
+     
         <>
         <section className="feedHead">
           <div className="feedHead_left">
@@ -49,12 +49,12 @@ export default function Feed() {
               Explore different content you would love
             </p>
           </div>
-          <div className="feed_button">
-            <button onClick={()=> setNewPost(true)}>
+          <Link className="feed_button" to={'/home/newfeed'}>
+            <button>
            <span><FiEdit2/></span> 
-           post a content
+               post a content
             </button>
-          </div>
+          </Link>
         </section>
         <section className="feeds_container">
           <div className="feeds_sec">
@@ -66,9 +66,10 @@ export default function Feed() {
             { display == 'For you'? <ForYouFeeds/> : display === 'Featured'? <Featured/> : <Recent/>}
           </div>
         </section>
-        </> :
+        </>
+        {/* </> :
         <NewFeed setNewPost={setNewPost}/>
-      }
+      } */}
      
     </motion.main>
   )
