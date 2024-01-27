@@ -27,7 +27,7 @@ export default function Draft() {
         user: { userRef, profileImage, fullName},
       } = useSelector((state: any) => state.reducer.user);
 
-    function formatDate(inputDate) {
+    function formatDate(inputDate: any) {
         // Parse the input date string
         const dateObject = new Date(inputDate);
       
@@ -64,7 +64,7 @@ export default function Draft() {
         };
       }, [userRef]);
 
-      const Delete_draft = async (id)=>{
+      const Delete_draft = async (id: string)=>{
         const getDraft = collection(db, "drafts");
         const querry = query(getDraft, where("draftId", "==", `${id}`));
         const unSubscribe =  onSnapshot(querry, (querySnapShot) => {

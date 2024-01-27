@@ -5,7 +5,7 @@ type ProfileEditProps = {
   bio: string;
   count: number;
   handleText: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  handleback: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
+  handleback: (e: any) => void;
   profession: string;
   setProfession: React.Dispatch<React.SetStateAction<string>>;
   name: string;
@@ -15,7 +15,7 @@ setname_message:React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ProfileEdit: React.FC<ProfileEditProps> = ({bio, count, handleText, handleback, profession, setProfession, name, setName, name_message, setname_message})=> {
-const handleName = (e)=>{
+const handleName = (e: any)=>{
   setName(e.target.value);
 if(e.target.value.length > 0){
   setname_message('')

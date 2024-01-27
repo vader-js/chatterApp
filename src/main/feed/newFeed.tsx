@@ -5,16 +5,12 @@ import "./feed.css";
 import { Back } from "iconsax-react";
 import {
   addDoc,
-  arrayUnion,
   collection,
   deleteDoc,
   doc,
   getDocs,
   onSnapshot,
   query,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
@@ -41,6 +37,8 @@ export default function NewFeed({ setNewPost }: any) {
       user: User
     }  
   }
+ 
+
   const apiKey = import.meta.env.VITE_TINY_KEY;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,7 +47,7 @@ export default function NewFeed({ setNewPost }: any) {
   const [title, setTitle] = useState("");
   const [docId, setDocId] = useState("")
   const [isEditorLoaded, setIsEditorLoaded] = useState(false)
-  const [image, setimage] = useState("")
+  const [image, setimage] = useState<File | null>(null);
   const { user } = useSelector((state: userState) => state.reducer.user);
 
   const [button_load, setbutton_load] = useState(false)
@@ -105,7 +103,7 @@ export default function NewFeed({ setNewPost }: any) {
       draftId: generateUniqueId()
     })
   }
-  const Delete_draft = async (id)=>{
+  const Delete_draft = async (id: number)=>{
     const getDraft = collection(db, "drafts");
     const querry = query(getDraft, where("draftId", "==", `${id}`));
     const unSubscribe =  onSnapshot(querry, (querySnapShot) => {
@@ -126,7 +124,7 @@ if (editorContent.length > 0) {
       const UniqueId = generateUniqueId();
           try {
             if(image){
-              const {upload} = await uploadImageToStorage({image, UniqueId})
+               await uploadImageToStorage({image, UniqueId});
             }
             const time = new Date();
             await addDoc(collection(db, 'posts'),{
@@ -161,7 +159,7 @@ if (editorContent.length > 0) {
   }
     setbutton_load(false);
   };
-  const editorInit = (ext, editor) => {
+  const editorInit = (ext: any, editor: any) => {
     // setIsEditorLoaded(true);
     editorRef.current = editor;
     setIsEditorLoaded(true);
@@ -175,7 +173,6 @@ if (editorContent.length > 0) {
           getDocs(querry)
             .then((querySnapshot) => {
               querySnapshot.forEach((doc) => {
-                console.log("Document ID:", doc.id);
                 setDocId(doc.id);
                 dispatch(setUserRef(doc.id));
               });
@@ -184,9 +181,9 @@ if (editorContent.length > 0) {
               console.error("Error getting documents:", error);
             });
   },[])
-  useEffect(()=>{
-    console.log({docId});
-  },[docId])
+  // useEffect(()=>{
+  //   console.log({docId});
+  // },[docId])
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     setTitle(e.currentTarget.value);
   };
@@ -258,23 +255,27 @@ if (editorContent.length > 0) {
                 once you do not need it anymore.
               */
           
-              input.onchange = function () {
-                var file = input.files[0];
-                setimage(file);
-                var reader = new FileReader();
-                reader.onload = function () {
-                 var dataURL = reader.result;
-      
-                // Pass the Data URL to TinyMCE
-                cb(dataURL);
-
-      // Optionally, you can save the file data for later use
-    };
-    reader.readAsDataURL(file);
-              };
+                input.onchange = function (event: Event) {
+                  const inputElement = event.target as HTMLInputElement;
+                  const file = inputElement.files?.[0];
+                
+                  if (file) {
+                    setimage(file);
+                
+                    const reader = new FileReader();
+                    reader.onload = function () {
+                      const dataURL = reader.result as string;
+                
+                      // Assuming cb is a callback function with a string parameter
+                      cb(dataURL);
+                    };
+                
+                    reader.readAsDataURL(file);
+                  }
+                };
           
               input.click();
-              setimage('')
+              setimage(null)
             },
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",

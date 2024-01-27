@@ -4,9 +4,13 @@ import { ref, uploadString, getDownloadURL, uploadBytes } from "firebase/storage
 import { storage } from "../firebase/firebaseConfig";
 import { useEffect, useState } from "react";
 
+interface UploadImageProps {
+  image: File;
+  UniqueId: string;
+}
 
 export function useGetDoc(){
-    const getDocument = async (post) => {
+    const getDocument = async (post: any) => {
         try {
           if (!post) {
             return { postDoc: null, postRef: null };
@@ -37,7 +41,7 @@ export function useGetDoc(){
     }
 
 export function useGetUserDoc(){
-    const getUserDoc = async (userId)=>{
+    const getUserDoc = async (userId: string)=>{
         try{
             const userCollectionRef = doc(db, 'users', userId);
             const userDoc = await getDoc(userCollectionRef);
@@ -53,8 +57,8 @@ export function useGetUserDoc(){
 
 // Upload a single image to Firebase Storage and return its URL
 export function useUploadImage() {
-  const uploadImageToStorage = async ({image, UniqueId})=>{
-    if (image === '') return;
+  const uploadImageToStorage = async ({image, UniqueId}: UploadImageProps)=>{
+    if (!image) return;
     const imageRef = ref(storage , `postImage/${UniqueId}`)
     const upload = await uploadBytes(imageRef, image)
     return {upload}
@@ -63,7 +67,7 @@ export function useUploadImage() {
   return { uploadImageToStorage };
 }
 
-export function uploadProfileMedia(type: string,){
+export function uploadProfileMedia(type: 'profile_image' | 'header',){
   let uploadProfileImage: (params: { image: string; userRef: string }) => Promise<void>;
 
   if (type === 'profile_image') {
@@ -78,12 +82,15 @@ export function uploadProfileMedia(type: string,){
       const profileImage = ref(storage, `profileheader/${userRef}-${type}`);
       await uploadString(profileImage, image, 'data_url');
     };
+  }else {
+    // Default case, throw an error if type is not recognized
+    throw new Error(`Unsupported profile media type: ${type}`);
   }
 
   return { uploadProfileImage };
 }
 
-export const uploadHeader = async (file, userRef : string, header_set: any)=>{
+export const uploadHeader = async (file : File, userRef : string, header_set: any)=>{
   try{
     const headerRef = ref(storage, `profileheader/${userRef}-header`);
     await uploadBytes(headerRef, file).then((response)=> header_set(true))
@@ -125,7 +132,7 @@ export const useMediaHandler = () => {
   const [image, setImage] = useState('');
   const [caption, setCaption] = useState('');
 
-  const handleMedia = (file) => {
+  const handleMedia = (file: File) => {
     console.log({file})
     let files = file;
     let fileType = files.type;
@@ -136,7 +143,7 @@ export const useMediaHandler = () => {
       let fileReader = new FileReader();
       fileReader.readAsDataURL(files);
       fileReader.onload = () => {
-        setImage(fileReader.result);
+        setImage(fileReader.result as string);
         setCaption(filename);
       };
     } else {

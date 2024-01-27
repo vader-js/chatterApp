@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import { uploadProfileMedia, useMediaHandler } from '../Helpers/hooks';
 import './edit.css'
 
-export default function PictureEdit({image, handleMedia}) {
+export default function PictureEdit({image, handleMedia}: any) {
     const choose_ref = useRef<HTMLInputElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +44,7 @@ export default function PictureEdit({image, handleMedia}) {
         choose_ref.current.click();
     }
   }
-  const handleMediaChange = (e)=>{
+  const handleMediaChange = (e: any)=>{
     console.log({e})
     handleMedia(e)
   }

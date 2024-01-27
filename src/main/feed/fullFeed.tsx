@@ -29,6 +29,20 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsBookmarks, BsFillBookmarksFill } from "react-icons/bs";
 import { updateInview } from "../../app/authSlice";
 
+interface Post {
+  body: string;
+  bookmark: boolean;
+  bookmarks: [];
+  id: string;
+  likes: number;
+  like: boolean;
+  comment?: [];
+  name: string;
+  title: string;
+  createdAt: string;
+  views?: number;
+};
+
 export default function FullFeed() {
   let {
     state: { post, profileImage, fullName, image},
@@ -39,7 +53,7 @@ export default function FullFeed() {
   // const {getUserDoc} = useGetUserDoc();
   const [isComment, setIsComment] = useState(false);
   const [comment, setComment] = useState("");
-  const [one_post, set_one_post] = useState(null);
+  const [one_post, set_one_post] = useState<any | {}>({})
   const [liked, setLiked] = useState(false);
   const {
     user: { userRef },
@@ -49,11 +63,11 @@ export default function FullFeed() {
     const postCollectionRef = collection(db, "posts");
     const q = query(postCollectionRef, where("id", "==", post.id));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const post_1 = [];
-      querySnapshot.forEach((doc) => {
+      const post_1 : Post [] = [];
+      querySnapshot.forEach((doc: any) => {
         post_1.push(doc.data());
       });
-      set_one_post(...post_1);
+      set_one_post(post_1[0]);
     });
   }, []);
 
@@ -64,7 +78,7 @@ export default function FullFeed() {
       let current_time = new Date().toString();
       try {
         if(postDoc?.exists()){
-          let view_present = postDoc.data().views.filter(_view => _view.userRef === userRef);
+          let view_present = postDoc.data().views.filter((_view: any )=> _view.userRef === userRef);
           console.log('vieewwwwwsssss',postDoc.data().views)
           console.log({view_present})
           if(view_present.length <= 0){
@@ -92,7 +106,7 @@ export default function FullFeed() {
   };
   const handleIsComment = async ( comment: string) => {
     try {
-      const { postDoc, postRef } = await getDocument(one_post.id);
+      const { postDoc, postRef }: any = await getDocument(one_post?.id);
       const current_time = new Date()
       if (comment && postRef) {
         await updateDoc(postRef, {
@@ -110,13 +124,13 @@ export default function FullFeed() {
 
   const handleBookmark = async () => {
     try {
-      const { postDoc, postRef } = await getDocument(post.id);
+      const { postDoc, postRef }: any = await getDocument(post.id);
       const post_id = post.id;
       if (postDoc.exists()) {
         const current_time = new Date();
         let filteredDocs = postDoc
           .data()
-          .bookmarks.filter((doc) => doc.userRef === userRef);
+          .bookmarks.filter((doc: any) => doc.userRef === userRef);
         if (filteredDocs.length) {
           let bookmark_to_remove = filteredDocs[0];
           // console.log({bookmark_time})
@@ -136,13 +150,13 @@ export default function FullFeed() {
 
   const handleLike = async () => {
     try {
-      const { postDoc, postRef } = await getDocument(post.id);
-      const { userDoc, userCollectionRef } = await getUserDoc(userRef);
+      const { postDoc, postRef }: any = await getDocument(post.id);
+      const { userDoc, userCollectionRef }: any = await getUserDoc(userRef);
 
       if (postDoc.exists()) {
         let filteredDocs = postDoc
           .data()
-          .likedBy.filter((doc) => doc === userRef);
+          .likedBy.filter((doc: any) => doc === userRef);
         console.log({ filteredDocs });
         if (filteredDocs.length) {
           setLiked(false);
@@ -163,15 +177,15 @@ export default function FullFeed() {
         return;
       } else {
         const userPost = userDoc.data().post;
-        const updateUserPost = userPost.map((posts) => {
+        const updateUserPost = userPost.map((posts: any) => {
           if (posts.id === post.postedById) {
-            const isLiked = posts.likedBy.indexOf(`${userRef}`);
+            const isLiked = posts?.likedBy.indexOf(`${userRef}`);
             console.log("isLiked", isLiked);
             if (isLiked !== -1) {
-              const likes = posts.likes - 1;
-              const likedBySlice = posts.likedBy.slice(isLiked, isLiked + 1);
-              const likedBy = posts.likedBy.filter(
-                (like) => like !== likedBySlice[0]
+              const likes = posts?.likes - 1;
+              const likedBySlice = posts?.likedBy.slice(isLiked, isLiked + 1);
+              const likedBy = posts?.likedBy.filter(
+                (like: any) => like !== likedBySlice[0]
               );
               console.log({ likedBy });
               return { ...posts, likes, likedBy };
@@ -253,7 +267,7 @@ export default function FullFeed() {
         <div className="profile_likes">
           {one_post && (
             <span className="info_icon like" onClick={handleLike}>
-              {one_post.likedBy.indexOf(userRef) === -1 ? (
+              {one_post?.likedBy && one_post.likedBy.indexOf(userRef) === -1 ? (
                 <AiOutlineHeart size={18} />
               ) : (
                 <AiFillHeart color="red" size={18} />
@@ -265,7 +279,7 @@ export default function FullFeed() {
         <div className="profile_bookmark">
           {one_post && (
             <span className="info_icon bookmark" onClick={handleBookmark}>
-              {one_post.bookmarks.filter(
+              {one_post?.bookmarks && one_post.bookmarks.filter(
                 (book: any) => book.userRef === userRef
               ).length > 0 ? (
                 <BsFillBookmarksFill size={18} color="#543EE0" />
@@ -275,20 +289,20 @@ export default function FullFeed() {
             </span>
           )}
 
-          {one_post && one_post.bookmarks.length}
+          {one_post?.bookmarks && one_post?.bookmarks.length}
         </div>
         <div className="profile_views">
           <span className="info_icon">
             <Activity size="18" />
           </span>
-          {one_post && one_post?.views?.length} views
+          {one_post?.views && one_post.views.length} views
         </div>
       </section>
       {isComment && (
           <section className="comment_sec">
             <ul className="comment_lists">
               {one_post
-                ? one_post?.comments?.map((com) => {
+                ? one_post?.comments?.map((com: any) => {
                     return (
                       <li className="com_list" key={com.id}>
                         <span className="com_image">

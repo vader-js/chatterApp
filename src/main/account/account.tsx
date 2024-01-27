@@ -49,7 +49,7 @@ export default function Account() {
   const { getDocument } = useGetDoc();
   const { getUserDoc } = useGetUserDoc();
 
-  const [posts, setPosts] = useState("");
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [profile_Image, setProfileImage] = useState(profileImage);
   const [_header, set_header] = useState(headerImage)
@@ -62,7 +62,7 @@ export default function Account() {
   const { image, handleMedia, removeMedia } = useMediaHandler();
 
   // function for changing header
-  const header_upload = (e)=>{
+  const header_upload = (e: any)=>{
     if(e){
    
       uploadHeader(e , userRef, set_header_set)
@@ -112,7 +112,7 @@ export default function Account() {
   }, [bio]);
 
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, "users", `${userRef}`), (doc) => {
+    const unsub = onSnapshot(doc(db, "users", `${userRef}`), (doc: any) => {
       // console.log("Current data: ", doc.data());
       // console.log({ prof: doc.data().profession });
       if (doc.data().profession || doc.data().bio) {
@@ -212,13 +212,13 @@ export default function Account() {
 
   const handleLike = async (post: any) => {
     try {
-      const { postDoc, postRef } = await getDocument(post.id);
-      const { userDoc, userCollectionRef } = await getUserDoc(userRef);
+      const { postDoc, postRef }: any = await getDocument(post.id);
+      const { userDoc, userCollectionRef }: any = await getUserDoc(userRef);
 
       if (postDoc.exists()) {
         let filteredDocs = postDoc
           .data()
-          .likedBy.filter((doc) => doc === userRef);
+          .likedBy.filter((doc: any) => doc === userRef);
         console.log({ filteredDocs });
         if (filteredDocs.length) {
           setLiked(false);
@@ -239,7 +239,7 @@ export default function Account() {
         return;
       } else {
         const userPost = userDoc.data().post;
-        const updateUserPost = userPost.map((posts) => {
+        const updateUserPost = userPost.map((posts: any) => {
           if (posts.id === post.postedById) {
             const isLiked = posts.likedBy.indexOf(`${userRef}`);
             console.log("isLiked", isLiked);
@@ -247,7 +247,7 @@ export default function Account() {
               const likes = posts.likes - 1;
               const likedBySlice = posts.likedBy.slice(isLiked, isLiked + 1);
               const likedBy = posts.likedBy.filter(
-                (like) => like !== likedBySlice[0]
+                (like: any) => like !== likedBySlice[0]
               );
               console.log({ likedBy });
               return { ...posts, likes, likedBy };
@@ -277,7 +277,7 @@ export default function Account() {
         const postData = doc.data();
         post.push(postData);
       });
-      setPosts(post.sort((a, b) => b.createdAt - a.createdAt));
+      setPosts(post.sort((a: any, b: any) => b.createdAt - a.createdAt));
       setLoading(false);
       // console.log({posts})
     });
@@ -353,7 +353,7 @@ export default function Account() {
           </span>
           <span className={header ? "header_menu_container": 'header_false'}>
             <ul className="header_menu_lists">
-              <li className="header_menu_list" onClick={(e)=> handlefileSelect(e)}>change header</li>
+              <li className="header_menu_list" onClick={(e: any)=> handlefileSelect(e)}>change header</li>
               <li className="header_menu_list">delete header</li>
             </ul>
           </span>

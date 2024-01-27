@@ -71,7 +71,7 @@ const dateConverter = (date: string)=>{
     };
     const handleIsComment = async (post: any, comment: string) => {
       try {
-        const { postDoc, postRef } = await getDocument(post.id);
+        const { postDoc, postRef }: any = await getDocument(post.id);
         const current_time = new Date()
         if (comment && postRef) {
           await updateDoc(postRef, {
@@ -88,13 +88,13 @@ const dateConverter = (date: string)=>{
     };
     const handleBookmark = async() => {
       try{
-        const {postDoc, postRef} = await getDocument(post.id)  
+        const {postDoc, postRef}: any = await getDocument(post.id)  
         const post_id = post.id;
         if (postDoc.exists()){
           const current_time = new Date();
           let filteredDocs = postDoc
           .data()
-          .bookmarks.filter((doc) => doc.userRef === userRef);  
+          .bookmarks.filter((doc: any) => doc.userRef === userRef);  
         if (filteredDocs.length) {
           let bookmark_to_remove = filteredDocs[0]
           // console.log({bookmark_time})
@@ -203,7 +203,7 @@ const dateConverter = (date: string)=>{
 
     useEffect( () =>{
       const fetchData = async () =>{
-        const {postDoc, postRef} = await getDocument(post.id)
+        const {postDoc, postRef}: any = await getDocument(post.id)
        if(post.userId === userRef){
         await updateDoc(postRef, {profession, name : fullName})
        }
@@ -211,7 +211,7 @@ const dateConverter = (date: string)=>{
       fetchData();
     }, [post, profession, fullName, userRef])
 
-    const confirm = async (id)=>{
+    const confirm = async (id: string)=>{
       const getPost = collection(db, "posts");
       const querry = query(getPost, where("postedById", "==", `${id}`));
       const unSubscribe =  onSnapshot(querry, (querySnapShot) => {
@@ -346,7 +346,7 @@ const dateConverter = (date: string)=>{
           <section className="comment_sec">
             <ul className="comment_lists">
               {post.comments
-                ? post.comments.map((com) => {
+                ? post.comments.map((com: any) => {
                     return (
                       <li className="com_list" key={com}>
                         <span className="com_image">

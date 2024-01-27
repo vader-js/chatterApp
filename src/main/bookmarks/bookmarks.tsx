@@ -26,7 +26,7 @@ import EachPostOthers from "../feed/eachPostOthers";
 const { confirm } = Modal;
 
 export default function Bookmarks() {
-    type Post = {
+    interface Post {
         body: string;
         bookmark: boolean;
         bookmarks: [];
@@ -39,8 +39,9 @@ export default function Bookmarks() {
         createdAt: string;
         views: number;
       };
-    const [post, setPost] = useState([])
-    const [bookData, setBookData] = useState([])
+    const [post, setPost] = useState<Post[] | []>([])
+    const [bookData, setBookData] = useState<any | []>([])
+    const [liked, setLiked] = useState(false);
     const [loading, setLoading] = useState(true)
     const { getDocument } = useGetDoc();
     const { getUserDoc } = useGetUserDoc();
@@ -55,9 +56,9 @@ export default function Bookmarks() {
         setLoading(true)
         const getPost = collection(db, "posts");
         const unSubscribe = onSnapshot(getPost, (querySnapShot) => {
-          const post = [];
+          const post : Post[]= [];
           querySnapShot.forEach((doc) => {
-            const postData = doc.data();
+            const postData: any = doc.data();
             post.push(postData);
             
           });
@@ -85,14 +86,14 @@ export default function Bookmarks() {
       
         if (post.length > 0) {
           // Filter posts that have been bookmarked by the current user
-          const bookmarkedPosts = post.filter((singlePost) =>
-            singlePost.bookmarks.some((_book) => _book.userRef === userRef)
+          const bookmarkedPosts = post.filter((singlePost: any) =>
+            singlePost.bookmarks.some((_book: any) => _book.userRef === userRef)
           );
       
           // Sort bookmarkedPosts based on current_time in bookmarks array
-          const sortedBookmarkedPosts = bookmarkedPosts.sort((a, b) => {
-            const timeA = a.bookmarks.find((_book) => _book.userRef === userRef)?.current_time || 0;
-            const timeB = b.bookmarks.find((_book) => _book.userRef === userRef)?.current_time || 0;
+          const sortedBookmarkedPosts = bookmarkedPosts.sort((a: any, b: any) => {
+            const timeA = a.bookmarks.find((_book: any) => _book.userRef === userRef)?.current_time || 0;
+            const timeB = b.bookmarks.find((_book: any) => _book.userRef === userRef)?.current_time || 0;
       
             // Sorting in descending order; adjust as needed
             return timeB - timeA;
@@ -129,11 +130,11 @@ export default function Bookmarks() {
           const querySnapshot = await getDocs(postCollection);
       
           const deletePromises = querySnapshot.docs.map(async (doc) => {
-            const postData = doc.data();
-            const bookmarkToDelete = postData.bookmarks.find(_book => _book.userRef === userRef);
+            const postData: any = doc.data();
+            const bookmarkToDelete = postData.bookmarks.find((_book: any )=> _book.userRef === userRef);
       
             if (bookmarkToDelete) {
-              const { postDoc, postRef } = await getDocument(postData.id);
+              const { postDoc, postRef }: any = await getDocument(postData.id);
               await updateDoc(postRef, {
                 bookmarks: arrayRemove(bookmarkToDelete),
               });
@@ -175,13 +176,13 @@ export default function Bookmarks() {
 
       const handleLike = async (post: any) => {
         try {
-          const { postDoc, postRef } = await getDocument(post.id);
-          const { userDoc, userCollectionRef } = await getUserDoc(userRef);
+          const { postDoc, postRef }: any = await getDocument(post.id);
+          const { userDoc, userCollectionRef }: any = await getUserDoc(userRef);
     
           if (postDoc.exists()) {
             let filteredDocs = postDoc
               .data()
-              .likedBy.filter((doc) => doc === userRef);
+              .likedBy.filter((doc: any) => doc === userRef);
             console.log({ filteredDocs });
             if (filteredDocs.length) {
               setLiked(false);
@@ -202,7 +203,7 @@ export default function Bookmarks() {
             return;
           } else {
             const userPost = userDoc.data().post;
-            const updateUserPost = userPost.map((posts) => {
+            const updateUserPost = userPost.map((posts: any) => {
               if (posts.id === post.postedById) {
                 const isLiked = posts.likedBy.indexOf(`${userRef}`);
                 console.log("isLiked", isLiked);
@@ -210,7 +211,7 @@ export default function Bookmarks() {
                   const likes = posts.likes - 1;
                   const likedBySlice = posts.likedBy.slice(isLiked, isLiked + 1);
                   const likedBy = posts.likedBy.filter(
-                    (like) => like !== likedBySlice[0]
+                    (like: any) => like !== likedBySlice[0]
                   );
                   console.log({ likedBy });
                   return { ...posts, likes, likedBy };

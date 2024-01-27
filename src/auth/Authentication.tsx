@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { PropsWithChildren, useEffect, useState } from 'react'
+import { PropsWithChildren, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../main/firebase/firebaseConfig';
 import { useDispatch } from 'react-redux';

@@ -72,11 +72,11 @@ export default function ForYouFeeds() {
   }, []);
 
   useEffect(() => {
-    const post_selected = posts.sort((a,b)=> b.createdAt - a.createdAt).slice(0, post_to_display);
+    const post_selected = posts.sort((a: any,b: any)=> b.createdAt - a.createdAt).slice(0, post_to_display);
       set_selected_post(post_selected);
     if(post_no > 15){
-      const post_select = posts.sort((a,b)=> b.createdAt - a.createdAt).slice(0, post_to_display);
-      const new_posts = posts.sort((a,b)=> b.createdAt - a.createdAt).slice(0, post_no);
+      const post_select = posts.sort((a: any,b: any)=> b.createdAt - a.createdAt).slice(0, post_to_display);
+      const new_posts = posts.sort((a: any,b: any)=> b.createdAt - a.createdAt).slice(0, post_no);
       const difference = new_posts.filter((new_post) => !post_select.includes(new_post))
       set_selected_post(prevSelectedPost => [...prevSelectedPost, ...difference]);
       set_post_to_display(post_no);
@@ -85,13 +85,13 @@ export default function ForYouFeeds() {
 
   const handleLike = async (post: any) => {
     try {
-      const { postDoc, postRef } = await getDocument(post.id);
-      const { userDoc, userCollectionRef } = await getUserDoc(userRef);
+      const { postDoc, postRef }: any = await getDocument(post.id);
+      const { userDoc, userCollectionRef }: any = await getUserDoc(userRef);
 
       if (postDoc.exists()) {
         let filteredDocs = postDoc
           .data()
-          .likedBy.filter((doc) => doc === userRef);
+          .likedBy.filter((doc: any) => doc === userRef);
         console.log({ filteredDocs });
         if (filteredDocs.length) {
           setLiked(false);
@@ -112,7 +112,7 @@ export default function ForYouFeeds() {
         return;
       } else {
         const userPost = userDoc.data().post;
-        const updateUserPost = userPost.map((posts) => {
+        const updateUserPost = userPost.map((posts: any) => {
           if (posts.id === post.postedById) {
             const isLiked = posts.likedBy.indexOf(`${userRef}`);
             console.log("isLiked", isLiked);
@@ -120,7 +120,7 @@ export default function ForYouFeeds() {
               const likes = posts.likes - 1;
               const likedBySlice = posts.likedBy.slice(isLiked, isLiked + 1);
               const likedBy = posts.likedBy.filter(
-                (like) => like !== likedBySlice[0]
+                (like: any) => like !== likedBySlice[0]
               );
               console.log({ likedBy });
               return { ...posts, likes, likedBy };
