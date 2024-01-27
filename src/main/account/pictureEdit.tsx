@@ -1,6 +1,5 @@
 import { ProfileCircle } from 'iconsax-react';
 import React, { useEffect, useRef } from 'react'
-import { uploadProfileMedia, useMediaHandler } from '../Helpers/hooks';
 import './edit.css'
 
 export default function PictureEdit({image, handleMedia}: any) {

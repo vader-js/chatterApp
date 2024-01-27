@@ -2,7 +2,7 @@ import {useState} from 'react'
 import "./feed.css"
 import {motion} from 'framer-motion'
 import {FiEdit2} from 'react-icons/fi'
-import NewFeed from './newFeed'
+
 import ForYouFeeds from './forYouFeeds'
 import Featured from './Featured'
 import Recent from './Recent'
@@ -13,7 +13,7 @@ export default function Feed() {
   // const {user} = useSelector((state: any) => state.user )
   const [display, setDisplay] = useState('For you')
   
-  const [newPost, setNewPost] = useState(false)
+  // const [newPost, setNewPost] = useState(false)
 
   const handleDisplay = (e: React.MouseEvent<HTMLElement>)=>{
     e.preventDefault();

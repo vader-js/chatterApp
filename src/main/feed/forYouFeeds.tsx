@@ -3,39 +3,39 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
-  doc,
+
   increment,
   onSnapshot,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetDoc, useGetUserDoc } from "../Helpers/hooks";
 import EachPost from "./eachpost";
 import SkeletonUi from "../Helpers/skeleton";
-import { setCachedPosts } from "../../app/postSlice";
-import { PrevInview, updateInview, updatePostNo } from "../../app/authSlice";
+
+import { updatePostNo } from "../../app/authSlice";
 import './feed.css'
 
 
 
 export default function ForYouFeeds() {
-  type Post = {
-    body: string;
-    bookmark: boolean;
-    bookmarks: [];
-    id: string;
-    likes: number;
-    like: boolean;
-    comment: [];
-    name: string;
-    title: string;
-    createdAt: string;
-    views: number;
-  };
+  // type Post = {
+  //   body: string;
+  //   bookmark: boolean;
+  //   bookmarks: [];
+  //   id: string;
+  //   likes: number;
+  //   like: boolean;
+  //   comment: [];
+  //   name: string;
+  //   title: string;
+  //   createdAt: string;
+  //   views: number;
+  // };
 
-  const { user: { userRef, fullName, profession, post_no, inview, p_inview},
+  const { user: { userRef, fullName, profession, post_no},
 } = useSelector((state: any) => state.reducer.user);
 
 // const {
@@ -45,7 +45,7 @@ export default function ForYouFeeds() {
 
   const [posts, setPosts] = useState([]);
   const [selected_post, set_selected_post] = useState([]);
-  const [liked, setLiked] = useState(false);
+  // const [liked, setLiked] = useState(false);
   const { getDocument } = useGetDoc();
   const { getUserDoc } = useGetUserDoc();
   const [load, setload] = useState(false);
@@ -94,7 +94,7 @@ export default function ForYouFeeds() {
           .likedBy.filter((doc: any) => doc === userRef);
         console.log({ filteredDocs });
         if (filteredDocs.length) {
-          setLiked(false);
+          // setLiked(false);
           await updateDoc(postRef, {
             likedBy: arrayRemove(userRef),
             likes: increment(-1),
@@ -104,7 +104,7 @@ export default function ForYouFeeds() {
             likedBy: arrayUnion(userRef),
             likes: increment(1),
           });
-          setLiked(true);
+          // setLiked(true);
         }
       }
       if (!userDoc.exists()) {

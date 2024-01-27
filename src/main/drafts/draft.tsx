@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IoReturnDownBack } from 'react-icons/io5';
 import { Link, useNavigate } from 'react-router-dom'
 import SkeletonUi from '../Helpers/skeleton';
@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import NoContent from '../Helpers/NoContent';
 import { ProfileCircle } from 'iconsax-react';
 import './draft.css'
-import ReactTimeAgo from 'react-time-ago';
 import { MdDelete } from 'react-icons/md';
 
 interface draft {
@@ -67,7 +66,7 @@ export default function Draft() {
       const Delete_draft = async (id: string)=>{
         const getDraft = collection(db, "drafts");
         const querry = query(getDraft, where("draftId", "==", `${id}`));
-        const unSubscribe =  onSnapshot(querry, (querySnapShot) => {
+       onSnapshot(querry, (querySnapShot) => {
           querySnapShot.forEach( async (docs: any) => {
             await deleteDoc(doc(db, "drafts", docs.id));
           });

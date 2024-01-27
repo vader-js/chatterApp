@@ -1,8 +1,8 @@
-import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { ref, uploadString, getDownloadURL, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase/firebaseConfig";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface UploadImageProps {
   image: File;
@@ -93,7 +93,7 @@ export function uploadProfileMedia(type: 'profile_image' | 'header',){
 export const uploadHeader = async (file : File, userRef : string, header_set: any)=>{
   try{
     const headerRef = ref(storage, `profileheader/${userRef}-header`);
-    await uploadBytes(headerRef, file).then((response)=> header_set(true))
+    await uploadBytes(headerRef, file).then(()=> header_set(true))
   }catch{
     console.log('upload error')
   }

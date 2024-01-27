@@ -19,16 +19,16 @@ import {
     } from "iconsax-react";
     import {BsBookmarks, BsFillBookmarksFill} from 'react-icons/bs'
     import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
-    import { db, storage } from "../firebase/firebaseConfig";
-    import { useEffect, useState, useRef } from "react";
-    import { useDispatch, useSelector } from "react-redux";
-    import { useDownloadProfileImage, useDownloadimage, useGetDoc, useGetUserDoc } from "../Helpers/hooks";
-    import { Link, useLocation } from "react-router-dom";
+    import { db} from "../firebase/firebaseConfig";
+    import { useEffect, useState } from "react";
+
+    import { useDownloadProfileImage, useDownloadimage, useGetDoc } from "../Helpers/hooks";
+    import { Link} from "react-router-dom";
     import ReactTimeAgo from "react-time-ago";
-  import { ref } from "firebase/storage";
+ 
   import { TfiLayoutMenuSeparated } from "react-icons/tfi";
   import { Popconfirm } from "antd";
-  import { updateInview } from "../../app/authSlice";
+
   
   
    function EachPostOthers({ post, handleLike, userRef, fullName, profession}: any) {
@@ -56,7 +56,7 @@ import {
       };
       const handleIsComment = async (post: any, comment: string) => {
         try {
-          const { postDoc, postRef } = await getDocument(post.id);
+          const {  postRef } = await getDocument(post.id);
           const current_time = new Date()
           // const {userDoc, userCollectionRef} = await getUserDoc(userRef)
           const userRefs = doc(db, "users", userRef);
@@ -129,7 +129,7 @@ import {
   
       useEffect( () =>{
         const fetchData = async () =>{
-          const {postDoc, postRef}: any = await getDocument(post.id)
+          const { postRef}: any = await getDocument(post.id)
          if(post.userId === userRef){
           await updateDoc(postRef, {profession, name : fullName})
          }
@@ -140,7 +140,7 @@ import {
       const confirm = async (id : string)=>{
         const getPost = collection(db, "posts");
         const querry = query(getPost, where("postedById", "==", `${id}`));
-        const unSubscribe =  onSnapshot(querry, (querySnapShot) => {
+         onSnapshot(querry, (querySnapShot) => {
           querySnapShot.forEach( async (docs) => {
             await deleteDoc(doc(db, "posts", docs.id));
           });

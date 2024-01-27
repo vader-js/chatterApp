@@ -87,7 +87,7 @@ export default function Account() {
   const [count, setCount] = useState(0);
   const [profession, setProfession] = useState("");
   const [header, setHeader] = useState(false)
-  const [liked, setLiked] = useState(false);
+  // const [liked, setLiked] = useState(false);
   const chooseref = useRef<HTMLInputElement>(null);
 
   const handleText = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -221,7 +221,7 @@ export default function Account() {
           .likedBy.filter((doc: any) => doc === userRef);
         console.log({ filteredDocs });
         if (filteredDocs.length) {
-          setLiked(false);
+          // setLiked(false);
           await updateDoc(postRef, {
             likedBy: arrayRemove(userRef),
             likes: increment(-1),
@@ -231,7 +231,7 @@ export default function Account() {
             likedBy: arrayUnion(userRef),
             likes: increment(1),
           });
-          setLiked(true);
+          // setLiked(true);
         }
       }
       if (!userDoc.exists()) {

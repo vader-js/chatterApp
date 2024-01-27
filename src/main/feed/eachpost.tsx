@@ -1,14 +1,14 @@
 import {
-  Timestamp,
+
     arrayRemove,
     arrayUnion,
     collection,
     deleteDoc,
     doc,
-    getDoc,
+ 
     onSnapshot,
     query,
-    serverTimestamp,
+
     updateDoc,
     where,
   } from "firebase/firestore";
@@ -16,22 +16,22 @@ import {
     ProfileCircle,
     Book1,
     MessageNotif,
-    Lovely,
+   
     Activity,
     Send,
   } from "iconsax-react";
   import {BsBookmarks, BsFillBookmarksFill} from 'react-icons/bs'
   import {AiOutlineHeart, AiFillHeart} from 'react-icons/ai'
-  import { db, storage } from "../firebase/firebaseConfig";
+  import { db} from "../firebase/firebaseConfig";
   import { useEffect, useState, useRef } from "react";
   import { useDispatch, useSelector } from "react-redux";
-  import { useDownloadProfileImage, useDownloadimage, useGetDoc, useGetUserDoc } from "../Helpers/hooks";
-  import { Link, useLocation } from "react-router-dom";
+  import { useDownloadProfileImage, useDownloadimage, useGetDoc,  } from "../Helpers/hooks";
+  import { Link } from "react-router-dom";
   import ReactTimeAgo from "react-time-ago";
-import { ref } from "firebase/storage";
+
 import { TfiLayoutMenuSeparated } from "react-icons/tfi";
 import { Popconfirm } from "antd";
-import { PrevInview, updateInview } from "../../app/authSlice";
+import { updateInview } from "../../app/authSlice";
 import './feed.css'
 
 
@@ -46,8 +46,7 @@ import './feed.css'
     const [image, setImage] = useState('')
     const [profileImage, setProfileImage] = useState('')
     const [menu_display, set_menu_display] = useState(false)
-    const [post_delete_load, set_post_delete_load] = useState(false)
-    const [to_view, set_to_view] = useState()
+
 
     const dispatch = useDispatch();
 
@@ -60,10 +59,7 @@ import './feed.css'
           // download profile image
 const {downloadProfileImage} = useDownloadProfileImage();
   
-const dateConverter = (date: string)=>{
-  const time = new Date(date)
-  return time
-}
+
 
     const handleComment = (e: React.FormEvent<HTMLInputElement>) => {
       setComment(e.currentTarget.value);
@@ -71,7 +67,7 @@ const dateConverter = (date: string)=>{
     };
     const handleIsComment = async (post: any, comment: string) => {
       try {
-        const { postDoc, postRef }: any = await getDocument(post.id);
+        const {  postRef }: any = await getDocument(post.id);
         const current_time = new Date()
         if (comment && postRef) {
           await updateDoc(postRef, {
@@ -203,7 +199,7 @@ const dateConverter = (date: string)=>{
 
     useEffect( () =>{
       const fetchData = async () =>{
-        const {postDoc, postRef}: any = await getDocument(post.id)
+        const { postRef}: any = await getDocument(post.id)
        if(post.userId === userRef){
         await updateDoc(postRef, {profession, name : fullName})
        }
@@ -214,7 +210,7 @@ const dateConverter = (date: string)=>{
     const confirm = async (id: string)=>{
       const getPost = collection(db, "posts");
       const querry = query(getPost, where("postedById", "==", `${id}`));
-      const unSubscribe =  onSnapshot(querry, (querySnapShot) => {
+     onSnapshot(querry, (querySnapShot) => {
         querySnapShot.forEach( async (docs) => {
           await deleteDoc(doc(db, "posts", docs.id));
         });

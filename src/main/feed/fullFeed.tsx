@@ -1,20 +1,20 @@
 import {
   Activity,
   Book1,
-  Lovely,
+
   MessageNotif,
   ProfileCircle,
   Send,
 } from "iconsax-react";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import {  useLocation } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import { useGetDoc, useGetUserDoc } from "../Helpers/hooks";
 import {
   arrayRemove,
   arrayUnion,
   collection,
-  doc,
+ 
   increment,
   onSnapshot,
   query,
@@ -23,8 +23,6 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { useDispatch, useSelector } from "react-redux";
-import { TfiLayoutMenuSeparated } from "react-icons/tfi";
-import { Popconfirm } from "antd";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsBookmarks, BsFillBookmarksFill } from "react-icons/bs";
 import { updateInview } from "../../app/authSlice";
@@ -54,7 +52,7 @@ export default function FullFeed() {
   const [isComment, setIsComment] = useState(false);
   const [comment, setComment] = useState("");
   const [one_post, set_one_post] = useState<any | {}>({})
-  const [liked, setLiked] = useState(false);
+  // const [liked, setLiked] = useState(false);
   const {
     user: { userRef },
   } = useSelector((state: any) => state.reducer.user);
@@ -62,7 +60,7 @@ export default function FullFeed() {
   useEffect(() => {
     const postCollectionRef = collection(db, "posts");
     const q = query(postCollectionRef, where("id", "==", post.id));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+     onSnapshot(q, (querySnapshot) => {
       const post_1 : Post [] = [];
       querySnapshot.forEach((doc: any) => {
         post_1.push(doc.data());
@@ -106,7 +104,7 @@ export default function FullFeed() {
   };
   const handleIsComment = async ( comment: string) => {
     try {
-      const { postDoc, postRef }: any = await getDocument(one_post?.id);
+      const { postRef }: any = await getDocument(one_post?.id);
       const current_time = new Date()
       if (comment && postRef) {
         await updateDoc(postRef, {
@@ -159,7 +157,7 @@ export default function FullFeed() {
           .likedBy.filter((doc: any) => doc === userRef);
         console.log({ filteredDocs });
         if (filteredDocs.length) {
-          setLiked(false);
+          // setLiked(false);
           await updateDoc(postRef, {
             likedBy: arrayRemove(userRef),
             likes: increment(-1),
@@ -169,7 +167,7 @@ export default function FullFeed() {
             likedBy: arrayUnion(userRef),
             likes: increment(1),
           });
-          setLiked(true);
+          // setLiked(true);
         }
       }
       if (!userDoc.exists()) {

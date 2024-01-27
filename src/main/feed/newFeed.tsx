@@ -45,7 +45,7 @@ export default function NewFeed({ setNewPost }: any) {
   const { state} = useLocation();
   const editorRef = useRef<any>(null);
   const [title, setTitle] = useState("");
-  const [docId, setDocId] = useState("")
+ 
   const [isEditorLoaded, setIsEditorLoaded] = useState(false)
   const [image, setimage] = useState<File | null>(null);
   const { user } = useSelector((state: userState) => state.reducer.user);
@@ -106,7 +106,7 @@ export default function NewFeed({ setNewPost }: any) {
   const Delete_draft = async (id: number)=>{
     const getDraft = collection(db, "drafts");
     const querry = query(getDraft, where("draftId", "==", `${id}`));
-    const unSubscribe =  onSnapshot(querry, (querySnapShot) => {
+    onSnapshot(querry, (querySnapShot) => {
       querySnapShot.forEach( async (docs: any) => {
         await deleteDoc(doc(db, "drafts", docs.id));
       });
@@ -159,7 +159,7 @@ if (editorContent.length > 0) {
   }
     setbutton_load(false);
   };
-  const editorInit = (ext: any, editor: any) => {
+  const editorInit = (_ : any, editor: any) => {
     // setIsEditorLoaded(true);
     editorRef.current = editor;
     setIsEditorLoaded(true);
@@ -173,7 +173,7 @@ if (editorContent.length > 0) {
           getDocs(querry)
             .then((querySnapshot) => {
               querySnapshot.forEach((doc) => {
-                setDocId(doc.id);
+                // setDocId(doc.id);
                 dispatch(setUserRef(doc.id));
               });
             })
@@ -242,7 +242,7 @@ if (editorContent.length > 0) {
             image_title: true,
             automatic_uploads: true,
             file_picker_types: 'image',
-            file_picker_callback: function (cb, value, meta) {
+            file_picker_callback: function (cb: (data: string) => void) {
               var input = document.createElement('input');
               input.setAttribute('type', 'file');
               input.setAttribute('accept', 'image/*');

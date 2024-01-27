@@ -1,4 +1,4 @@
-import React from 'react'
+
 import NoContent from '../Helpers/NoContent'
 
 export default function Recent() {

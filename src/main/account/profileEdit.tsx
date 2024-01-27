@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import React, { ChangeEvent } from 'react'
+
 
 type ProfileEditProps = {
   bio: string;

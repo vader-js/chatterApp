@@ -21,7 +21,7 @@ export default function Register() {
     // create database for users in firestore
     const userCollectionRef = collection(db, "users")
     // console.log(user);
-    const [errorMessage, setErrorMessage] = useState("")
+    // const [errorMessage, setErrorMessage] = useState("")
     const [userProfile, setUserProfile] = useState({
         fName: "",
         lName: "",
@@ -72,7 +72,11 @@ export default function Register() {
         e.preventDefault();
         setloading(true);
         if(userProfile.password !== userProfile.Cpassword){
-            setErrorMessage("passwords do not match")
+            // setErrorMessage("passwords do not match")
+            notification.error({
+                message: 'Error',
+                description: "passwords do not match",
+            });
         }else{
           await createUserWithEmailAndPassword(auth, userProfile.email, userProfile.password)
             .then((result)=> {
@@ -108,35 +112,35 @@ export default function Register() {
             .catch((error)=> {
                 switch (error.code) {
                     case "auth/email-already-in-use":
-                        setErrorMessage("Email already in use");
+                        // setErrorMessage("Email already in use");
                         notification.error({
                             message: 'Error',
                             description: "Email already in use",
                         });
                         break;
                     case "auth/invalid-email":
-                        setErrorMessage( "Invalid email");
+                        // setErrorMessage( "Invalid email");
                         notification.error({
                             message: 'Error',
                             description: "Invalid email",
                         });
                         break;
                     case "auth/weak-password":
-                        setErrorMessage( "Weak password");
+                        // setErrorMessage( "Weak password");
                         notification.error({
                             message: 'Error',
                             description: "Weak password",
                         });
                         break;
                     case 'auth/operation-not-allowed':
-                        setErrorMessage( "Operation not allowed")
+                        // setErrorMessage( "Operation not allowed")
                         notification.error({
                             message: 'Error',
                             description: "Operation not allowed",
                         });
                         break
                     default:
-                        setErrorMessage( "Something went wrong");
+                        // setErrorMessage( "Something went wrong");
                         notification.error({
                             message: 'Error',
                             description: "Something went wrong",

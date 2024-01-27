@@ -2,7 +2,7 @@
 import { useEffect, useState} from "react"
 import Sidebar from "./sidebar/sidebar"
 import { Outlet, useNavigate } from "react-router-dom"
-import { auth } from "../firebase/firebaseConfig"
+
 import { ProfileCircle, Notification, SearchNormal1 } from "iconsax-react"
 import {motion} from 'framer-motion'
 import "./layout.css"
@@ -11,7 +11,7 @@ import { db } from "../firebase/firebaseConfig"
 import { collection, getDocs, query, where} from "firebase/firestore"
 import { setUser, setUserProfileImage, setUserRef } from "../../app/authSlice"
 import { useDispatch } from "react-redux"
-import { onAuthStateChanged } from "firebase/auth"
+
 import {  useDownloadProfileImage } from "../Helpers/hooks"
 import Socials from "./socials"
 

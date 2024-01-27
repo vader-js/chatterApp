@@ -5,11 +5,9 @@ import {
     getDocs,
     increment,
     onSnapshot,
-    query,
     updateDoc,
-    where,
   } from "firebase/firestore";
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import { db } from '../firebase/firebaseConfig';
 import {IoReturnDownBack} from 'react-icons/io5'
 import './bookmarks.css'
@@ -41,7 +39,7 @@ export default function Bookmarks() {
       };
     const [post, setPost] = useState<Post[] | []>([])
     const [bookData, setBookData] = useState<any | []>([])
-    const [liked, setLiked] = useState(false);
+    // const [liked, setLiked] = useState(false);
     const [loading, setLoading] = useState(true)
     const { getDocument } = useGetDoc();
     const { getUserDoc } = useGetUserDoc();
@@ -134,7 +132,7 @@ export default function Bookmarks() {
             const bookmarkToDelete = postData.bookmarks.find((_book: any )=> _book.userRef === userRef);
       
             if (bookmarkToDelete) {
-              const { postDoc, postRef }: any = await getDocument(postData.id);
+              const { postRef }: any = await getDocument(postData.id);
               await updateDoc(postRef, {
                 bookmarks: arrayRemove(bookmarkToDelete),
               });
@@ -185,7 +183,7 @@ export default function Bookmarks() {
               .likedBy.filter((doc: any) => doc === userRef);
             console.log({ filteredDocs });
             if (filteredDocs.length) {
-              setLiked(false);
+              // setLiked(false);
               await updateDoc(postRef, {
                 likedBy: arrayRemove(userRef),
                 likes: increment(-1),
@@ -195,7 +193,7 @@ export default function Bookmarks() {
                 likedBy: arrayUnion(userRef),
                 likes: increment(1),
               });
-              setLiked(true);
+              // setLiked(true);
             }
           }
           if (!userDoc.exists()) {
