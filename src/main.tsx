@@ -105,12 +105,11 @@ const router = createBrowserRouter(
 )
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-      <RouterProvider router={router}/>
-      </PersistGate>
-    </Provider>
-   
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <RouterProvider router={router} />
+    </PersistGate>
+  </Provider>
+// </React.StrictMode>
 )
