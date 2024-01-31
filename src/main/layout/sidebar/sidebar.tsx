@@ -42,7 +42,7 @@ const confirm = async ()=>{
         
         <ul className="sidebarBody">
             <li className="sidebarText">
-              <NavLink to={"/home"}
+              <NavLink to="/home"
               className="sideLink"
               style={({isActive}) => (isActive? active: undefined)}
               end>
@@ -50,28 +50,28 @@ const confirm = async ()=>{
               </NavLink>
               </li>
               <li className="sidebarText">
-              <NavLink to={"/home/bookmarks"}
+              <NavLink to="/home/bookmarks"
               className="sideLink"
               style={({isActive}) => (isActive? active: undefined)}>
               <span><Bookmark size={20}/></span> Bookmarks
               </NavLink>
               </li>
               <li className="sidebarText">
-              <NavLink to={"/home/teamblogs"}
+              <NavLink to="/home/teamblogs"
               className="sideLink"
               style={({isActive}) => (isActive? active: undefined)}>
               <span><People size={20}/></span> Team blogs
               </NavLink>
               </li>
               <li className="sidebarText">
-              <NavLink to={"/home/drafts"}
+              <NavLink to="/home/drafts"
               className="sideLink"
               style={({isActive}) => (isActive? active: undefined)}>
               <span><MessageText1 size={20}/></span> Drafts
               </NavLink>
               </li>
               <li className="sidebarText">
-              <NavLink to={"/home/analytics"}
+              <NavLink to="/home/analytics"
               className="sideLink"
               style={({isActive}) => (isActive? active: undefined)}>
               <span><Activity size={20}/></span> Analytics

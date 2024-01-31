@@ -1,5 +1,6 @@
 
 import './helpers.css'
+import noContent from '../../assets/images/noContent.jpg'
 
 type Props = {
     size?: number,
@@ -8,7 +9,7 @@ type Props = {
 export default function NoContent({size, description}: Props){
   return (
     <main className='noData_main'>
-       <img src='/src/assets/images/noContent.jpg' alt="no content" 
+       <img src={noContent} alt="no content" 
        width={size || 300} height={size || 300} /> 
        <p>{description ? description : 'no content'}</p>
     </main>
