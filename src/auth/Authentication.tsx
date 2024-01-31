@@ -15,7 +15,7 @@ export default function Authentication({children}: PropsWithChildren<Authenticat
     const dispatch = useDispatch()
     const [userAuth, setUserAuth]  = useState(false)
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+        onAuthStateChanged(auth, (authUser) => {
           if (authUser) {
             const {email, uid} = authUser;
             setUserAuth(true)
@@ -28,7 +28,7 @@ export default function Authentication({children}: PropsWithChildren<Authenticat
           }
         });
     
-        return () => unsubscribe();
+        // return () => unsubscribe();
       }, [userAuth, navigate]);
   return (
     <div>

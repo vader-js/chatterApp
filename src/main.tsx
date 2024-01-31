@@ -1,4 +1,4 @@
-
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import Auth from './auth/auth.tsx'
@@ -105,11 +105,11 @@ const router = createBrowserRouter(
 )
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // <React.StrictMode>
+  <React.StrictMode>
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <RouterProvider router={router} />
     </PersistGate>
   </Provider>
-// </React.StrictMode>
+</React.StrictMode>
 )
