@@ -27,7 +27,7 @@ import Draft from './main/drafts/draft.tsx'
 const router = createBrowserRouter(
   [
 {
-  path: "/*",
+  path: "/",
   element: <Animate name="Animate">
     <App />
   </Animate>,
