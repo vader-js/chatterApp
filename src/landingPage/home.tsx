@@ -1,5 +1,5 @@
-import { useState, MouseEvent } from "react";
-import hero from "../assets/images/landinghero.jpg";
+import { useState, MouseEvent, useEffect } from "react";
+// import hero from "../assets/images/landinghero.jpg";
 import aboutimg from "../assets/images/aboutimg.jpg";
 import analytics from "../assets/images/analytics.png";
 import community from "../assets/images/community.png";
@@ -25,16 +25,16 @@ export default function Home() {
 
 
 
-// useEffect(() => {
-//     const interval = setInterval(() => {
-//       if (idNum === feeds.length) {
-//         setIdNum(1);
-//       } else {
-//         setIdNum(idNum + 1);
-//       }
-//     }, 10000);
-//     return () => clearInterval(interval);
-// }, [idNum]);
+useEffect(() => {
+    const interval = setInterval(() => {
+      if (idNum === feeds.length) {
+        setIdNum(1);
+      } else {
+        setIdNum(idNum + 1);
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+}, [idNum]);
 const navigate =  useNavigate();
 const handleAuth = (e: MouseEvent) => {
   e.preventDefault();
@@ -64,7 +64,7 @@ const handleAuth = (e: MouseEvent) => {
         </ul>
       </nav>
       <section className="hero">
-        <img src={hero} alt="" />
+        {/* <img src={hero} alt="landing" className="hero_img"/> */}
         <div className="herocontent">
           <h1 className="herohead">
             welcome to vader-chatter: a haven for text-based content

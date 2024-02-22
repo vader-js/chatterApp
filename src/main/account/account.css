@@ -1,5 +1,10 @@
 .account_container{
-    margin: -4% -8%;
+    min-width: 118% ;
+    margin: -6% -8%;
+    width: max-content;
+    /* height: 100%; */
+    /* padding: -6% -8% 0 -8%; */
+    
 }
 
 .account_main{

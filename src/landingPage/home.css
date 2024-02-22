@@ -71,15 +71,29 @@ nav ul{
     width: 100%;
     height: calc(100vh - 70px); 
     position: relative;
-    background: rgba(0, 0, 0, 0.55);
+    /* background: rgba(0, 0, 0, 0.55); */
+    overflow: hidden;
 }
-.hero img{
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../assets/images/landinghero.jpg'); /* Add your image URL here */
+    background-size: cover;
+    filter: brightness(0.55); /* Darkening effect on the image */
+    /* z-index: -1;  */
+}
+
+/* .hero_img{
     width: 100%;
     height: 100%;
     object-fit: cover;
-    position: relative;
+    position: absolute;
     z-index: -1;
-}
+} */
 .herocontent{
     position: absolute;
     top: 50%;
@@ -88,6 +102,7 @@ nav ul{
     text-align: start;
     color: #FFFFFF;
     width: 70%;
+    z-index: 1;
 }
 .herohead{
     font-size: 48px;
@@ -233,8 +248,8 @@ nav ul{
     flex: 1;
 }
 .feedsImage img{
-    width: 280px;
-    height: 280px;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     border-radius: 50%;
 }
@@ -243,13 +258,13 @@ nav ul{
 }
 .desc{
     font-weight: 400;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 27px;
     margin-bottom: 3rem;
 }
 .name{
     font-weight: 500;
-    font-size: 22px;
+    font-size: 20px;
     line-height: 36px;
     margin-bottom: 3rem;
 }
@@ -272,15 +287,15 @@ nav ul{
 }
 .feedactive{
     display: inline-flex;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background-color: #543EE0;
 }
 .feedinactive{
     display: inline-flex;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background-color: white;
     border: 2px solid #543EE0;
@@ -291,7 +306,7 @@ nav ul{
 .radio{
    position: absolute;
    bottom: 10px;
-   left: 170px;
+   left: 120px;
 }
 .share{
     width: 100%;
@@ -421,4 +436,307 @@ nav ul{
     font-size: 16px;
     line-height: 27px;
     cursor: pointer;
+}
+
+/* responsveness for mobile 480px */
+@media screen and (max-width: 480px) {
+    nav{
+        padding: 0 1%;
+        width: 100%;
+        height: 50px;
+    }
+    .navigation{
+        display: none;
+    }
+    .title{
+        flex: 0.3;
+    }
+    .ball{
+        width: 13px;
+        height: 13px;
+      
+    }
+    .titlebig{
+        font-size: 1.1rem;
+    }
+    .auth{
+        font-size: 12px;
+        display: inline-flex;
+        justify-content: end;
+    }
+    .auth li:not(:last-child){
+        margin-right: 1rem;
+    }
+    .hero{
+        height: calc(100vh - 50px); 
+        /* margin-bottom: 1rem; */
+    }
+    .herohead{
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 35px;
+        margin-bottom: 2rem;
+    }
+    .herotext{
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 26px;
+        opacity: 0.7;
+        margin-bottom: 3rem;
+    }
+    .herobutton{
+        width: max-content;
+        line-height: normal;
+        height: 38px;   
+        padding: 0.6rem 1.3rem;
+        font-size: 15px;
+        margin: 0 auto;
+    }
+    .herocontent{
+        text-align: center;
+    }
+    .about{
+        width: 95%;
+        height: auto;
+        margin-bottom: 2rem;
+    }
+    .aboutcontent{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .abouthead{
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 54px;
+        text-transform: capitalize;
+        margin-bottom: 1rem;;
+        align-self: flex-start;
+    }
+    .abouttext{
+        font-size: 15px;
+        line-height: 27px;
+        margin-bottom: 1rem;
+    }
+    .aboutimg img{
+        width: 350px;
+        height: 250px;
+    }
+    .join{
+        width: 95%;
+        /* margin: 1rem auto 4rem auto; */
+        margin: 0 auto;
+    }
+    .joinhead{
+        font-weight: 700;
+        font-size: 30px;
+        line-height: 42px;
+        margin-bottom: 1rem;
+    }
+    .jointext{
+        width: 95%;
+        font-size: 15px; 
+    }
+    .joincontent{
+        width: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .joincontent article{
+        flex: 1;
+        min-width: 250px;
+        padding: 2%;
+        height: 300px;
+        border: 1px solid #D0D0D0;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+    .joincontent article:not(:last-child){
+        /* margin-right: 4rem; */
+        margin: 0 auto 1rem auto;
+    }
+    .joincontent h1{
+        margin-bottom: 1rem;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 36px;
+    }
+    .feedbacks{
+        width: 100%;
+        background: rgba(255, 237, 204, 0.5);
+        height: 350px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        position: relative;
+    }
+    .feedback{
+        width: 98%;
+        height: 90%;
+        margin: 0 auto;
+        display: inline-flex;
+        align-items: center;
+    }
+    .feeds{
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        width: 100%;
+        height: 100%;
+    }
+    .feedsImage{
+        flex: 1;
+    }
+    .feedsImage img{
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+    .feedsdesc{
+        flex: 2;
+        /* max-width: 200px; */
+       height: 70%;
+    }
+    .desc{
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        width: 100%;
+        height: 60%;
+       
+    }
+    .name{
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 26px;
+        margin-bottom: 1rem;
+    }
+    .name span{
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 27px;
+    }
+    .feeds button{
+        width: 150px;
+        height: 35px;
+        background: #543EE0;
+        border-radius: 5px;
+        border: none;
+        color: #FFFFFF;
+        cursor: pointer;
+    }
+    .feeds button:focus{
+        outline: none;
+    }
+    .feedactive{
+        display: inline-flex;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #543EE0;
+    }
+    .feedinactive{
+        display: inline-flex;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: white;
+        border: 2px solid #543EE0;
+    }
+    .feedactive, .feedinactive:not(:last-child){
+        margin-right: 1rem;
+    }
+    .radio{
+       position: absolute;
+       bottom: 10px;
+       left: 45%;
+    }
+    .share{
+        width: 100%;
+        height: auto;
+        /* display: flex;
+        flex-wrap: wrap;
+        align-content: center; */
+    }
+    .shares{
+        width: 97%;
+        /* height: 80%; */
+        height: auto;
+        margin: 0 auto;
+        display: block;
+        flex-wrap: wrap;
+        align-content: center;
+        align-items: start;
+    }
+    .imagebox{
+       
+       /* min-width: 100%; */
+       width: 280px;
+        height: 350px;
+        margin: 1rem auto;
+        position: relative;
+    }
+    .imagebox img{
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        position: absolute;
+    }
+    .imagebox img:nth-child(1){
+        left: 0;
+        top: 0;
+    }
+    
+    .imagebox img:nth-child(2){
+        right: 0;
+        top: 30%;
+    }
+    .imagebox img:nth-child(3){
+        left: 0;
+        bottom: 0;
+    }
+    .sharecontent{
+        flex: 1;
+        width: 100%;
+        height: 230px;
+        margin: 2rem auto;
+    }
+    .content{
+        width: 90%;
+        height: 100%;
+        margin: 0 auto;
+    }
+    .shareHead{
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 30px;
+        margin-bottom: 1rem;
+    }
+    .shareText{
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 27px;
+        margin-bottom: 2rem;
+    }
+    .share button{
+        width: 140px;
+        height: 35px;
+        font-size: 14px;
+        background: #543EE0;
+        border-radius: 5px;
+        border: none;
+        color: #FFFFFF;
+        cursor: pointer;
+    }
+    .share button:focus{
+        outline: none;
+    }
 }

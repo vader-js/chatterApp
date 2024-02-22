@@ -16,6 +16,7 @@ type User = {
     post_no?: number,
     inview?: string,
     p_inview?: string,
+    error_message?: {email?: string, password?: string, confirm_password?: string, first_name?: string, last_name?: string, title?: string},
   } ,
 }
 
@@ -44,6 +45,10 @@ export const userSlice: any = createSlice({
     setUser: (state, action) => {
       sessionStorage.setItem('user', JSON.stringify(action.payload));
       state.user = {...JSON.parse(sessionStorage.getItem('user') as string), post_no: 15, inview: '', p_inview: ''};
+    },
+    validateUser:(state, action)=>{
+      const user_state = state.user
+      state.user = {...user_state, error_message: action.payload }
     },
     removeUser: (state) => {
       sessionStorage.removeItem('user');
@@ -101,5 +106,5 @@ export const userSlice: any = createSlice({
   },
 })
 
-export const {setUser,removeUser, setUserRef, setUserProfileImage, updateUser, setUserHeaderImage, updatePostNo, updateInview, PrevInview} = userSlice.actions
+export const {setUser,removeUser, setUserRef, setUserProfileImage, updateUser, setUserHeaderImage, updatePostNo, updateInview, PrevInview, validateUser} = userSlice.actions
 export default userSlice.reducer

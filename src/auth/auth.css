@@ -221,3 +221,15 @@
     right: 15px;
     font-size: 18px;
 }
+.emaillabel,.passwordlabel, .Cpasswordlabel, .fNamelabel, .lNamelabel, .titlelabel{
+    position: relative;
+}
+.validate_message{
+    position: absolute;
+    text-align: end;
+    color: red;
+    font-size: 10px;
+    line-height: normal;
+    right: 0;
+    width: 300px;
+}
