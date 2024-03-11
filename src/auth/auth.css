@@ -233,3 +233,49 @@
     right: 0;
     width: 300px;
 }
+
+/* responsveness for mobile 480px */
+@media screen and (max-width: 480px) {
+    .authContainer{
+        display: block;
+        min-height: 100vh;
+        height: auto;
+    }
+    .authimage{
+     display: none;
+    }
+    .authentication{
+        width: 90%;
+        margin-top: 1rem;
+    }
+    .register, .Login{
+        font-size: 1rem;
+        font-weight: 600;
+        height: 2rem;
+        padding-bottom: 0.3rem;
+    }
+    .registerHead, .loginHead{
+        font-size: 25px;
+        line-height: 20px;
+        font-weight: 600;
+    }
+    .registerHead{
+        margin: 2rem 0;
+    }
+    .loginHead{
+        margin: 2rem 0
+    }
+    .googleRegister{
+        margin-bottom: 1rem;
+    }
+    .registerForm input[type="text"], .registerForm input[type="email"], .registerForm input[type="password"], .registerForm select, .loginForm input[type="email"], .loginForm input[type="password"], .loginForm input[type="text"]{
+        width: 100%;
+        border: 1px solid #CED4DA;
+        border-radius: 8px;
+        padding: 8px 8px;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 400;
+        margin-bottom: 1rem;
+    }
+}
