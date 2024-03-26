@@ -1,7 +1,6 @@
 import {
   Activity,
   Book1,
-
   MessageNotif,
   ProfileCircle,
   Send,
@@ -14,7 +13,6 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
- 
   increment,
   onSnapshot,
   query,
@@ -77,8 +75,8 @@ export default function FullFeed() {
       try {
         if(postDoc?.exists()){
           let view_present = postDoc.data().views.filter((_view: any )=> _view.userRef === userRef);
-          console.log('vieewwwwwsssss',postDoc.data().views)
-          console.log({view_present})
+          // console.log('vieewwwwwsssss',postDoc.data().views)
+          // console.log({view_present})
           if(view_present.length <= 0){
             await updateDoc(postRef, {
               views: arrayUnion({
@@ -96,7 +94,7 @@ export default function FullFeed() {
 
   useEffect(() =>{
     dispatch(updateInview(post.id));
-    console.log('postId', post.id)
+    // console.log('postId', post.id)
   },[post]);
 
   const handleComment = (e: React.FormEvent<HTMLInputElement>) => {

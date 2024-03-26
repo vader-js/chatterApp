@@ -273,7 +273,7 @@ const {downloadProfileImage} = useDownloadProfileImage();
           </span>
         </section>
         <section className="feed_title" onClick={()=> set_menu_display(false)}>
-          <h2>{post.title}</h2>
+          <h4>{post.title}</h4>
           <div>
             <span>
               <Book1 size="18" />

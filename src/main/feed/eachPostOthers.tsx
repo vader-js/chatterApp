@@ -203,7 +203,7 @@ import {
             </span>
           </section>
           <section className="feed_title" onClick={()=> set_menu_display(false)}>
-            <h2>{post.title}  - {post.id}</h2>
+            <h4>{post.title}  - {post.id}</h4>
             <div>
               <span>
                 <Book1 size="18" />

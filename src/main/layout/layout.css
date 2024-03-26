@@ -105,3 +105,68 @@
     height: 100%;
     margin: 5rem auto;
 }
+
+@media screen and (max-width: 480px) {
+   .sidebar{
+    display: none;
+   }
+   .layoutRight{
+    display: none;
+   }
+   .layoutBody{
+    width: 100%;
+    margin: 0 auto;
+}
+.layout_main{
+   width: 100%;
+
+}
+.layoutHead{
+    width: 100%;
+    padding: 0 2%;
+}
+.search{
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.searchGroup{
+    width: 100%;
+}
+.searchIcon{
+    position: absolute;
+    left: 5px;
+    top: 3px;
+    color: black;
+    opacity: 0.5;
+}
+.layout_profile{
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+.profileName{
+    margin-left: 0.5rem;
+    font-size: 12px;
+}
+.notification{
+    margin: 0 0.3rem;
+}
+.layout_profile_image{
+    width: 30px;
+    height: 30px;
+}
+
+.layoutContent{
+    width: 100%;
+    min-width: 100%;
+    height: calc(100vh - 4rem) ;
+    margin: 5px;
+    padding: 5px;
+}
+}
