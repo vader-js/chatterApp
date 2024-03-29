@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux"
 
 import {  useDownloadProfileImage } from "../Helpers/hooks"
 import Socials from "./socials"
+import { ImPlus } from "react-icons/im";
 
 
 export default function Layout() {
@@ -21,6 +22,7 @@ export default function Layout() {
   const dispatch = useDispatch()
   const [currentUser, setCurrentUser]= useState<any>([])
   const [displayName, setDisplayName] = useState('')
+  // const sidebar_ref = useRef()
   type User = {
     user: {
       fullName: string,
@@ -66,7 +68,6 @@ const {downloadProfileImage} = useDownloadProfileImage();
 
   useEffect(() => {
     if (currentUser.length === 1){
-      console.log(currentUser)
       const {fullName, email, uid, title, bio, profession} = currentUser[0]
       dispatch(setUser({fullName, email, uid, title, bio, profession}))}
   },[currentUser]);
@@ -103,7 +104,16 @@ const {downloadProfileImage} = useDownloadProfileImage();
       }
       fetchData();
   },[ user.userRef])
-  
+  const sidebar_open = () => {
+    const sidebarRef = document.getElementById('responsive_sidebar');
+    if (sidebarRef) {
+      sidebarRef.classList.toggle('sidebarVisible');
+      const option_icon = document.getElementById('option_icon');
+      if (option_icon) {
+        option_icon.classList.toggle('option_clicked');
+      }
+    }
+  }
 
   return (
     <motion.main 
@@ -143,6 +153,10 @@ const {downloadProfileImage} = useDownloadProfileImage();
             
             </div>
             <section className="layout_main">
+              <span className="option" onClick={sidebar_open} id="option_icon"><ImPlus color='white' size='20'/></span>
+              <div className="responsive_sidebar" id='responsive_sidebar'>
+                <Sidebar/>
+              </div>
             <article className="layoutContent">
                 <Outlet/>
             </article>

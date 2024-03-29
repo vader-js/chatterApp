@@ -75,8 +75,6 @@ export default function FullFeed() {
       try {
         if(postDoc?.exists()){
           let view_present = postDoc.data().views.filter((_view: any )=> _view.userRef === userRef);
-          // console.log('vieewwwwwsssss',postDoc.data().views)
-          // console.log({view_present})
           if(view_present.length <= 0){
             await updateDoc(postRef, {
               views: arrayUnion({
@@ -169,7 +167,7 @@ export default function FullFeed() {
         }
       }
       if (!userDoc.exists()) {
-        console.log("doc does not exist");
+        // console.log("doc does not exist");
         return;
       } else {
         const userPost = userDoc.data().post;

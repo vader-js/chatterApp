@@ -144,7 +144,7 @@ export default function Draft() {
                    )
                 })   
                 :
-        <NoContent size={300}/>
+        <NoContent size={300} description='Draft is currently empty'/>
 }
 </ul>
 }

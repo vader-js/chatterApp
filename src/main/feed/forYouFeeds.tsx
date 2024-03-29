@@ -87,8 +87,17 @@ export default function ForYouFeeds() {
     try {
       const { postDoc, postRef }: any = await getDocument(post.id);
       const { userDoc, userCollectionRef }: any = await getUserDoc(userRef);
+      let current_time = new Date().toString();
 
       if (postDoc.exists()) {
+        let view_present = postDoc.data().views.filter((_view: any )=> _view.userRef === userRef);
+        if(view_present.length <= 0){
+          await updateDoc(postRef, {
+            views: arrayUnion({
+              userRef, current_time
+            })
+          })
+        }
         let filteredDocs = postDoc
           .data()
           .likedBy.filter((doc: any) => doc === userRef);
@@ -141,10 +150,10 @@ export default function ForYouFeeds() {
   };
 
 
-  useEffect(() => {
-    console.log({ posts });
+  // useEffect(() => {
+  //   console.log({ posts });
   
-  }, [posts]);
+  // }, [posts]);
 
   const loadMore = async () => {
    await dispatch(updatePostNo(15));

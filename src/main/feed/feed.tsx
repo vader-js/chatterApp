@@ -21,7 +21,7 @@ export default function Feed() {
     const Featured = 'Featured';
     const Recent = 'Recent';
     let render = e.currentTarget.innerHTML;
-    console.log({render})
+    // console.log({render})
     switch (render) {
       case For_you:
         return setDisplay(For_you)

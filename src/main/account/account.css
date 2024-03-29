@@ -162,3 +162,51 @@
     min-height: 500px;
     padding: 2% 4%;
 }
+
+/* mobile responsiveness */
+@media screen and (max-width: 480px) {
+    .account_container{
+        min-width: 100% ;
+        margin: 0;
+        /* margin: -4px -2px; */
+    }
+    .account_image{
+        width: 90px;
+        height: 90px;
+        position: absolute;
+        border-radius: 50%;
+        top: -30px;
+        background-color: #fff;
+    }
+    .account_image img{
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+    .account_name{
+        font-size: 16px;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+    .account_profession{
+        font-size: 12px;
+        margin-bottom: 10px;
+        opacity: 0.5;
+    }
+    .account_edit{
+        position: absolute;
+        right: 10px;
+        top: 20px;
+        padding: 5px 8px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+    }
+    .account_bio{
+        width: 90%;
+        opacity: 0.5;
+        font-size: 14px;
+        min-height: 100px;
+        line-height: 24px;
+        margin-bottom: 0.5rem;
+    }
+}

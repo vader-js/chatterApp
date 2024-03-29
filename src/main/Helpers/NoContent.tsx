@@ -11,7 +11,7 @@ export default function NoContent({size, description}: Props){
     <main className='noData_main'>
        <img src={noContent} alt="no content" 
        width={size || 300} height={size || 300} /> 
-       <p>{description ? description : 'no content'}</p>
+       <p className='nocontent_desc'>{description ? description : 'no content'}</p>
     </main>
   )
 }

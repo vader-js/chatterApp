@@ -8,6 +8,10 @@
     flex-wrap: wrap;
     align-content: center;
     align-items: center;
+    position: relative;
+}
+.sidebar_cancel{
+    display: none;
 }
 .sidebarHead{
     width: 100%;
@@ -80,4 +84,77 @@
 .log{
     color: red;
      cursor: pointer;
+}
+
+/* mobile responsiveness */
+@media screen and (max-width: 480px) {
+    .sidebarContainer{
+        width: 100%;
+        height: auto;
+        min-height: auto;
+      
+    }
+    .sidebarHead{
+        width: 100%;
+        height: 2rem;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .sidebar_cancel{
+        display: block;
+        color: #543EE0;
+        justify-self: end;
+        position: absolute;
+        top: 10px;
+        right: 5px;
+    }
+    .sidebarHead h1{
+        font-size: 1rem;
+        font-weight: 600;
+        color: #543EE0;
+        /* margin: 1rem 0; */
+    }
+    .sidebarHead sup{
+        font-size: 0.5rem;
+        font-weight: 400;
+        color: black;
+    }
+    .sidebarPar{
+        font-size: 14px;
+        line-height: 20px;
+        margin-bottom: 0.5rem;
+    }
+    .sidebarBody{
+        list-style: none;
+        margin-bottom: 1rem;
+    }
+    .sidebarText{
+        margin-bottom: 0.5rem;
+    }
+    .sideLink{
+      
+        font-size: 12px;
+    }
+    .sideLink span{
+        margin-right: 1rem;
+    }
+
+    .trending{
+        list-style: none;
+        margin-bottom: 1rem;
+        cursor: not-allowed;
+    }
+    .trendText{
+        margin-bottom: 0.5rem;
+        font-size: 12px;
+        font-weight: 300;
+    }
+    .all{
+        color: #543EE0;
+    }
+    .log{
+        color: red;
+         cursor: pointer;
+    }
 }

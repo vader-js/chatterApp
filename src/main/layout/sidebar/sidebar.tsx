@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux"
 import "./sidebar.css"
 import { Popconfirm } from "antd"
 import { persistor } from "../../../app/store"
+// import { TiCancelOutline } from "react-icons/ti";
 
 export default function Sidebar() {
 
@@ -30,11 +31,17 @@ const handleSignOut= async ()=>{
 const confirm = async ()=>{
  await handleSignOut();
 }
+// const sidebar_close =  ()=>{
+//   const sidebarRef = document.getElementById('responsive_sidebar');
+//   if (sidebarRef) {
+//     sidebarRef.classList.remove('sidebarVisible');
+//   }
+// }
   return (
     <main className="sidebarContainer">
         <div className="sidebarHead">
             <h1><sup>vader</sup> Chatter</h1>
-           
+           {/* <span className="sidebar_cancel" onClick={sidebar_close}><TiCancelOutline size='22' /></span> */}
         </div>
         <p className="sidebarPar">
           Overview

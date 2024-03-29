@@ -86,8 +86,18 @@ const {downloadProfileImage} = useDownloadProfileImage();
       try{
         const {postDoc, postRef}: any = await getDocument(post.id)  
         const post_id = post.id;
+        const current_time = new Date();
+        const current_time_string = current_time.toString();
         if (postDoc.exists()){
-          const current_time = new Date();
+          let view_present = postDoc.data().views.filter((_view: any )=> _view.userRef === userRef);
+          if(view_present.length <= 0){
+            await updateDoc(postRef, {
+              views: arrayUnion({
+                userRef, current_time: current_time_string,
+              })
+            })
+          }
+         
           let filteredDocs = postDoc
           .data()
           .bookmarks.filter((doc: any) => doc.userRef === userRef);  

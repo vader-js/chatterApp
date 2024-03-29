@@ -88,3 +88,14 @@
 .draft_delete:hover{
     scale: 1.2;
 }
+@media screen and (max-width: 480px) {
+    .draft_top{
+        min-width: 100%;
+    }
+    .draft_main{
+        margin: 3rem auto;
+        min-width: 350px;
+        display: flex;
+        justify-content: center;
+    }
+}
