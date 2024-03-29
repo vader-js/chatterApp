@@ -162,7 +162,9 @@ const {downloadProfileImage} = useDownloadProfileImage();
             </article>
               <section className="layoutRight">
           <Socials/>
+          
         </section>
+
             </section>
            
       

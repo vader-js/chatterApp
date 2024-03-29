@@ -105,15 +105,17 @@
 .layout_main{
     display: flex;
     position: relative;
+    width: 100%;
 }
 .option{
-  display: none
-};
+  display: none;
+}
 
 .layoutRight{
     width: 30%;
     height: 100%;
     margin: 5rem auto;
+    border: 1px solid #543EE0;
 }
 
 @media screen and (max-width: 480px) {
@@ -182,7 +184,7 @@
 .option{
     display: block;
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     left: 20px;
     width: 50px;
     height: 50px;
@@ -193,12 +195,12 @@
     justify-content: center;
     opacity: 0.3;
     z-index: 999;
-    transition: transform 0.3s ease, left 0.3s ease; /* Apply transition effect to transform and left properties */
+    transition: transform 0.3s ease, left 0.3s ease; 
 }
 
 .option_clicked {
-    transform: rotate(45deg); /* Rotate the option */
-    left: calc(20px + 50px); /* Move the option to the right */
+    transform: rotate(45deg);
+    left: calc(20px + 50px); 
     opacity: 1;
 }
 .responsive_sidebar{
@@ -209,8 +211,6 @@
     z-index: 999;
     opacity: 0;
     transition: opacity 0.3s ease 0.3s; 
-    /* From https://css.glass */
-/* From https://css.glass */
 background: rgba(255, 255, 255, 0.45);
 border-radius: 16px;
 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -221,7 +221,7 @@ border: 1px solid rgba(255, 255, 255, 0.31);
 .sidebarVisible{
     display: block;
     opacity: 1;
-    /* transition: 3s ease;  */
+   
 }
 
 }

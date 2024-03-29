@@ -113,10 +113,10 @@ ayomide-shittu-a499081a9
       
     </div>
     {/* <div>
-      <h3 style={contentStyle}>3</h3>
+      <h3>3</h3>
     </div>
     <div>
-      <h3 style={contentStyle}>4</h3>
+      <h3>4</h3>
     </div> */}
   </Carousel>
   </main>
