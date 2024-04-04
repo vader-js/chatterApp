@@ -153,7 +153,7 @@ const {downloadProfileImage} = useDownloadProfileImage();
             
             </div>
             <section className="layout_main">
-              <span className="option" onClick={sidebar_open} id="option_icon"><ImPlus color='white' size='20'/></span>
+              {/* <span className="option" onClick={sidebar_open} id="option_icon"><ImPlus color='white' size='20'/></span> */}
               <div className="responsive_sidebar" id='responsive_sidebar'>
                 <Sidebar/>
               </div>
@@ -170,6 +170,7 @@ const {downloadProfileImage} = useDownloadProfileImage();
       
       
         </section>
+        <span className="option" onClick={sidebar_open} id="option_icon"><ImPlus color='white' size='20'/></span>
     </motion.main>
   )
 }
