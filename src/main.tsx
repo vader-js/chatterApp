@@ -23,6 +23,9 @@ import Authentication from './auth/Authentication.tsx'
 import Account from './main/account/account.tsx'
 import NewFeed from './main/feed/newFeed.tsx'
 import Draft from './main/drafts/draft.tsx'
+import Analytics from './main/analytics/analytics.tsx'
+import TeamBlogs from './main/teamBlogs/teamBlogs.tsx'
+import Notification from './main/notification/notification.tsx'
 
 const router = createBrowserRouter(
   [
@@ -77,7 +80,7 @@ const router = createBrowserRouter(
     },
     {
       path: "/home/teamblogs",
-      element: <div>Blogs</div>
+      element: <TeamBlogs/>
     },
     {
       path: "/home/drafts",
@@ -85,7 +88,7 @@ const router = createBrowserRouter(
     },
     {
       path: "/home/analytics",
-      element: <div>Analytics</div>
+      element: <Analytics/>
     },
     {
       path: "/home/account",
@@ -93,7 +96,7 @@ const router = createBrowserRouter(
     },
     {
       path: "/home/notifications",
-      element: <div>Notifications</div>
+      element: <Notification/>
     },
     {
       path: '/home/newfeed',

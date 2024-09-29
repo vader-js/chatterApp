@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux"
 import {  useDownloadProfileImage } from "../Helpers/hooks"
 import Socials from "./socials"
 import { ImPlus } from "react-icons/im";
+import { getAuth, signOut } from "firebase/auth";
 
 
 export default function Layout() {
@@ -52,9 +53,31 @@ export default function Layout() {
 
         // download profile image
 const {downloadProfileImage} = useDownloadProfileImage();
+const INACTIVITY_TIMEOUT: number = 1800000; // e.g., 30 minutes = 1800000 milliseconds
+let inactivityTimer: ReturnType<typeof setTimeout>;
+const auth = getAuth();
 
+function resetInactivityTimer(): void {
+  clearTimeout(inactivityTimer);
 
-  
+  inactivityTimer = setTimeout(() => {
+    signOut(auth);
+  },INACTIVITY_TIMEOUT) 
+}
+
+// List of events that reset the timer
+const activityEvents: string[] = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+// Add event listeners to reset the inactivity timer
+// Add event listeners to reset the inactivity timer
+activityEvents.forEach((event: string) => {
+  document.addEventListener(event, resetInactivityTimer);
+});
+
+// Ensure that `resetInactivityTimer` runs when the component mounts
+useEffect(() => {
+  resetInactivityTimer();
+}, []);
+
   useEffect(() => {
     if (!user.fullName){
       const findUserInDatabase = async ()=>{

@@ -97,7 +97,7 @@ export default function Bookmarks() {
             return timeB - timeA;
           });
       
-          console.log({ sortedBookmarkedPosts });
+          // console.log({ sortedBookmarkedPosts });
       
           // Update state with sorted and filtered posts
           setBookData(sortedBookmarkedPosts);
@@ -230,7 +230,7 @@ export default function Bookmarks() {
       };
 
   return (
-    <main>
+    <main className="bookmark_body">
         <section className="bookmark_top">
             <div className="return" onClick={()=> navigate(-1)}>
             <IoReturnDownBack size={18} color='#543EE0'/>

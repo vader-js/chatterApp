@@ -19,9 +19,7 @@ export default function Authentication({children}: PropsWithChildren<Authenticat
           if (authUser) {
             const {email, uid} = authUser;
             setUserAuth(true)
-            console.log({email, uid})
             dispatch(setUser({email,uid}))
-            console.log({authUser})
           } else {
             setUserAuth(false);
             navigate('/');

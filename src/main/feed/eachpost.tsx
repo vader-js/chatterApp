@@ -327,7 +327,7 @@ const {downloadProfileImage} = useDownloadProfileImage();
               onClick={() => handleLike(post)}
             >
               {
-                post.likedBy.indexOf(userRef) === -1 ? <AiOutlineHeart size={18}/> : <AiFillHeart color='red' size={18}/>
+                post.likedBy.map((ref: any )=> ref.userRef === userRef).length > 0 ? <AiFillHeart color='red' size={18}/>: <AiOutlineHeart size={18}/> 
               }            
             </span>
             {post.likes}

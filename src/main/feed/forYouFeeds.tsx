@@ -88,29 +88,75 @@ export default function ForYouFeeds() {
       const { postDoc, postRef }: any = await getDocument(post.id);
       const { userDoc, userCollectionRef }: any = await getUserDoc(userRef);
       let current_time = new Date().toString();
+      let month_of_like = new Date().getMonth();
+      let current_month = ''
+      switch (month_of_like) {
+        case 0:
+          current_month =  'january';
+          break;
+        case 1:
+          current_month = 'february';
+          break;
+        case 2:
+          current_month = 'march';
+          break;
+        case 3:
+          current_month = 'april';
+          break;
+        case 4:
+          current_month = 'may';
+          break;
+        case 5:
+          current_month = 'june';
+          break;
+        case 6:
+          current_month = 'july';
+          break;
+        case 7:
+          current_month = 'august';
+          break;
+        case 8:
+            current_month = 'september';
+            break;
+        case 9:
+          current_month = 'october';
+          break;
+        case 10:
+          current_month = 'november';
+          break;
+        case 11:
+          current_month = 'december';
+          break;
+      
+        default:
+          break;
+      }
+
 
       if (postDoc.exists()) {
         let view_present = postDoc.data().views.filter((_view: any )=> _view.userRef === userRef);
         if(view_present.length <= 0){
           await updateDoc(postRef, {
             views: arrayUnion({
-              userRef, current_time
+              userRef, current_time, current_month
             })
           })
         }
         let filteredDocs = postDoc
           .data()
-          .likedBy.filter((doc: any) => doc === userRef);
+          .likedBy.filter((doc: any) => doc.userRef === userRef);
         console.log({ filteredDocs });
         if (filteredDocs.length) {
           // setLiked(false);
           await updateDoc(postRef, {
-            likedBy: arrayRemove(userRef),
+            // likedBy: arrayRemove(userRef),
+            likedBy: arrayRemove({...filteredDocs[0]}),
             likes: increment(-1),
           });
         } else {
           await updateDoc(postRef, {
-            likedBy: arrayUnion(userRef),
+            // likedBy: arrayUnion(userRef),
+            likedBy: arrayUnion({userRef, current_time, fullName, current_month}),
             likes: increment(1),
           });
           // setLiked(true);

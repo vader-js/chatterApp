@@ -1,3 +1,6 @@
+.bookmark_body{
+    min-width: 100%;
+}
 .bookmark_top{
     width: 100%;
     min-width: 630px;

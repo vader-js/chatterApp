@@ -117,10 +117,15 @@
     width: 30%;
     height: 100%;
     margin: 5rem auto;
-    border: 1px solid #543EE0;
 }
 
 @media screen and (max-width: 480px) {
+    .layoutContainer{
+        width: 100%;
+        height: 100vh;
+        display: block;
+        position: relative;
+    }
    .sidebar{
     display: none;
    }
@@ -186,7 +191,8 @@
 .option{
     display: block;
     position: absolute;
-    bottom: 50px;
+    /* position: sticky; */
+    bottom: 60px;
     left: 20px;
     width: 50px;
     height: 50px;
@@ -201,8 +207,9 @@
 }
 
 .option_clicked {
-    transform: rotate(45deg);
     left: calc(20px + 50px); 
+    transform: rotate(45deg);
+   
     opacity: 1;
 }
 .responsive_sidebar{
